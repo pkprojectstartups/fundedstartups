@@ -1,0 +1,162 @@
+---
+layout: default
+---
+
+<div class="container my-5">
+  <h1>{{ page.title }}</h1>
+  <p>{{ page.meta_description }}</p>
+
+  <!-- Retrieve filters from the page front matter -->
+  {% assign filter_key = page.filter.key %}
+  {% assign filter_values = page.filter.value | split: ", " %}
+
+  <!-- Filter the firms -->
+  {% assign filtered_firms = "" %}
+
+  {% for firm in site.vc_firms %}
+    {% assign firm_values = firm[filter_key] | split: ", " %}
+    {% assign match_found = false %}
+    {% for value in firm_values %}
+      {% if filter_values contains value %}
+        {% assign match_found = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+    {% if match_found %}
+      {% assign filtered_firms = filtered_firms | append: firm.url | append: "," %}
+    {% endif %}
+  {% endfor %}
+
+  <!-- Convert filtered_firms to an array -->
+  {% assign filtered_firms = filtered_firms | split: "," | uniq %}
+
+  {% assign current_page = page.current_page | default: 1 %}
+  {% assign per_page = page.per_page | default: 10 %}
+  {% assign total_pages = filtered_firms.size | divided_by: per_page | ceil %}
+
+  <!-- Calculate start index -->
+  {% assign previous_pages_count = current_page | minus: 1 %}
+  {% assign start_index = previous_pages_count | times: per_page %}
+
+  <!-- Paginate the filtered firms -->
+  {% assign paginated_firms = filtered_firms | slice: start_index, per_page %}
+
+  <!-- Search Form -->
+  <form action="{{ site.baseurl }}/custom_search.html" method="get" class="mb-4">
+    <div class="input-group">
+      <input
+        type="text"
+        name="query"
+        class="form-control"
+        placeholder="Search within this list"
+        required
+      />
+      <input type="hidden" name="json" value="{{ page.json_file }}" />
+      <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+  </form>
+
+  <!-- Total Firms Count -->
+  <p class="text-muted mb-4">
+    Showing <strong>{{ filtered_firms.size }}</strong> venture capital firms matching the filter criteria.
+  </p>
+
+  <!-- VC Firms Grid -->
+  <div class="row">
+    {% for firm_url in paginated_firms %}
+      {% assign firm = site.vc_firms | where: "url", firm_url | first %}
+      {% if firm %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-sm h-100 vc-card">
+            <a href="{{ firm.url | relative_url }}" class="text-decoration-none card-link">
+              <div class="card-body">
+                <h5 class="card-title">{{ firm.title }}</h5>
+                <p class="card-text text-muted">
+                  Offices: {{ firm.offices }}<br>
+                  Stages: {{ firm.stages }}<br>
+                  Markets: {{ firm.markets }}
+                </p>
+              </div>
+            </a>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- No Firms Message -->
+  {% unless paginated_firms.size > 0 %}
+    <p class="text-center text-muted">No VC firms found matching the filter criteria.</p>
+  {% endunless %}
+
+  <!-- Extract and Normalize Base URL -->
+  {% assign base_url = site.baseurl | append: page.url | split: "/page" | first | remove: "index.html" | replace: "//", "/" | strip %}
+  {% assign base_url = base_url | append: "/" | replace: "//", "/" %}
+
+  <!-- Pagination Controls -->
+  <nav class="d-flex justify-content-center mt-4">
+    <ul class="pagination">
+      <!-- Previous Page -->
+      {% if current_page > 1 %}
+        {% assign prev_page = current_page | minus: 1 %}
+        <li class="page-item">
+          <a class="page-link" href="{{ base_url }}page{{ prev_page }}">&laquo; Previous</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">&laquo; Previous</span>
+        </li>
+      {% endif %}
+
+      <!-- First Page and Leading Ellipsis -->
+      {% if current_page > 4 %}
+        <li class="page-item">
+          <a class="page-link" href="{{ base_url }}page1">1</a>
+        </li>
+        <li class="page-item disabled">
+          <span class="page-link">...</span>
+        </li>
+      {% endif %}
+
+      <!-- Dynamic Page Range -->
+      {% assign range_start = current_page | minus: 2 %}
+      {% assign range_end = current_page | plus: 2 %}
+
+      {% if range_start < 1 %}
+        {% assign range_start = 1 %}
+      {% endif %}
+      {% if range_end > total_pages %}
+        {% assign range_end = total_pages %}
+      {% endif %}
+
+      {% for page in (range_start..range_end) %}
+        <li class="page-item {% if page == current_page %}active{% endif %}">
+          <a class="page-link" href="{{ base_url }}page{{ page }}">{{ page }}</a>
+        </li>
+      {% endfor %}
+
+      <!-- Trailing Ellipsis and Last Page -->
+      {% assign trailing_threshold = total_pages | minus: 3 %}
+      {% if current_page < trailing_threshold %}
+        <li class="page-item disabled">
+          <span class="page-link">...</span>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="{{ base_url }}page{{ total_pages }}">{{ total_pages }}</a>
+        </li>
+      {% endif %}
+
+      <!-- Next Page -->
+      {% if current_page < total_pages %}
+        {% assign next_page = current_page | plus: 1 %}
+        <li class="page-item">
+          <a class="page-link" href="{{ base_url }}page{{ next_page }}">Next &raquo;</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Next &raquo;</span>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>

@@ -1,0 +1,238 @@
+---
+layout: default
+permalink: /vclist.online/{{ page.slug }}/
+---
+
+<div class="container py-5">
+  <div class="row">
+    <!-- Firm Details Section -->
+    <div class="col-lg-8 mx-auto">
+      <div class="card mb-4 shadow-lg">
+        <div class="card-body">
+          <!-- Header Section -->
+          <div class="text-center mb-4">
+            <h1 class="card-title display-5">{{ page.title }}</h1>
+            <button id="upvoteButton" class="btn btn-outline-success btn-lg mt-3">
+              + <span id="upvoteCount">0</span> Upvotes
+            </button>
+          </div>
+          <!-- Firm Information -->
+          <div class="firm-info">
+            <p><strong>Offices:</strong> {{ page.offices }}</p>
+            <p><strong>Stages:</strong> {{ page.stages }}</p>
+            <p><strong>Markets:</strong> {{ page.markets }}</p>
+            {% if page.website %}
+              <p><strong>Website:</strong> <a href="{{ page.website }}" target="_blank">{{ page.website }}</a></p>
+            {% endif %}
+            {% if page.linkedin %}
+              <p><strong>LinkedIn:</strong> <a href="{{ page.linkedin }}" target="_blank">{{ page.linkedin }}</a></p>
+            {% endif %}
+            {% if page.twitter %}
+              <p><strong>Twitter:</strong> <a href="{{ page.twitter }}" target="_blank">{{ page.twitter }}</a></p>
+            {% endif %}
+          </div>
+          <!-- Divider -->
+          <hr class="my-4">
+          <!-- Comments Section -->
+          <h2 class="mb-4">Leave a Comment</h2>
+          <form id="commentForm">
+            <div class="mb-3">
+              <label for="username" class="form-label">Your Name</label>
+              <input type="text" id="username" class="form-control" placeholder="Your Name" required>
+            </div>
+            <div class="mb-3">
+              <label for="comment" class="form-label">Your Comment</label>
+              <textarea id="comment" class="form-control" rows="4" placeholder="Your Comment" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Post Comment</button>
+            <p id="commentStatus" class="mt-3 text-success" style="display: none;">Commented successfully!</p>
+          </form>
+          <!-- Display Comments -->
+          <div id="commentsContainer" class="mt-5">
+            <h2 class="mb-3" id="commentsTitle" style="display: none;">Comments</h2>
+            <p id="noCommentsText" class="text-muted" style="display: none;">No comments yet. Be the first to comment!</p>
+            <ul id="commentsList" class="list-group">
+              <!-- Comments will be dynamically populated here -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="module">
+  // Import Firebase SDK
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+  import { getDatabase, ref, push, onValue, set, increment } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+  // Your Firebase Configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCAA588yxf40QdEJghoEQqfh37AK828MKw",
+    authDomain: "vc-comments.firebaseapp.com",
+    projectId: "vc-comments",
+    storageBucket: "vc-comments.appspot.com",
+    messagingSenderId: "114746372203",
+    appId: "1:114746372203:web:6b08497167b5a6c46dc12e"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  // Sanitize Function to Handle Invalid Firebase Paths
+  function sanitizePath(path) {
+    return path.replace(/[.#$[\]]/g, '_');
+  }
+
+  // Sanitize User Input
+  function sanitizeInput(input) {
+    const div = document.createElement('div');
+    div.textContent = input;
+    return div.innerHTML;
+  }
+
+  const rawVcId = "{{ page.id }}"; // Ensure this is dynamically passed
+  const vcId = sanitizePath(rawVcId);
+
+  /**
+   * Cookie Helper Functions
+   */
+  function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = `${name}=${value};${expires};path=/`;
+  }
+
+  function getCookie(name) {
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookies = decodedCookie.split(';');
+    name = name + "=";
+    for (let cookie of cookies) {
+      while (cookie.charAt(0) === ' ') {
+        cookie = cookie.substring(1);
+      }
+      if (cookie.indexOf(name) === 0) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return "";
+  }
+
+  function hasUpvoted(vcId) {
+    const upvotedFirms = getCookie("upvotedFirms");
+    if (!upvotedFirms) return false;
+
+    const upvotedArray = upvotedFirms.split(',');
+    return upvotedArray.includes(vcId);
+  }
+
+  function addUpvoteToCookie(vcId) {
+    const upvotedFirms = getCookie("upvotedFirms");
+    const upvotedArray = upvotedFirms ? upvotedFirms.split(',') : [];
+    if (!upvotedArray.includes(vcId)) {
+      upvotedArray.push(vcId);
+      setCookie("upvotedFirms", upvotedArray.join(','), 30); // Set cookie for 30 days
+    }
+  }
+
+  /**
+   * Comments Functionality
+   */
+  // Form Submission Logic
+  document.getElementById('commentForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    const username = sanitizeInput(document.getElementById('username').value.trim());
+    const comment = sanitizeInput(document.getElementById('comment').value.trim());
+
+    if (username && comment && vcId) {
+      push(ref(database, `comments/${vcId}`), {
+        username,
+        comment,
+        timestamp: Date.now()
+      }).then(() => {
+        document.getElementById('commentStatus').style.display = 'block';
+        document.getElementById('commentForm').reset();
+        setTimeout(() => {
+          document.getElementById('commentStatus').style.display = 'none';
+        }, 3000);
+      }).catch((error) => {
+        console.error('Error posting comment:', error);
+      });
+    } else {
+      alert('Please fill out both fields and ensure VC ID is valid!');
+    }
+  });
+
+  // Load Comments
+  onValue(ref(database, `comments/${vcId}`), (snapshot) => {
+    const commentsList = document.getElementById('commentsList');
+    const commentsTitle = document.getElementById('commentsTitle');
+    const noCommentsText = document.getElementById('noCommentsText');
+
+    commentsList.innerHTML = ''; // Clear current comments
+
+    if (snapshot.exists()) {
+      commentsTitle.style.display = 'block';
+      noCommentsText.style.display = 'none';
+
+      snapshot.forEach(childSnapshot => {
+        const data = childSnapshot.val();
+        const listItem = document.createElement('li');
+        listItem.className = "list-group-item";
+        listItem.textContent = `${data.username}: ${data.comment}`;
+        commentsList.appendChild(listItem);
+      });
+    } else {
+      commentsTitle.style.display = 'none';
+      noCommentsText.style.display = 'block';
+    }
+  });
+
+  /**
+   * Upvotes Functionality
+   */
+
+  // Update Upvote Count on Page Load
+  const upvoteCountRef = ref(database, `upvotes/${vcId}/count`);
+
+  onValue(upvoteCountRef, (snapshot) => {
+    const upvoteCount = snapshot.val() || 0;
+    const upvoteButton = document.getElementById('upvoteButton');
+    upvoteButton.textContent = `+ ${upvoteCount}`;
+
+    // Check cookies to dynamically disable button
+    if (hasUpvoted(vcId)) {
+      upvoteButton.disabled = true;
+    } else {
+      upvoteButton.disabled = false;
+    }
+  });
+
+  // Handle Upvote Button Click
+  document.getElementById('upvoteButton').addEventListener('click', () => {
+    const upvoteButton = document.getElementById('upvoteButton');
+
+    // Check if already upvoted
+    if (hasUpvoted(vcId)) {
+      upvoteButton.disabled = true;
+      return;
+    }
+
+    const upvoteRef = ref(database, `upvotes/${vcId}/count`);
+
+    // Use a transaction to increment the count atomically
+    set(upvoteRef, increment(1))
+      .then(() => {
+        // Store upvote state in cookies
+        addUpvoteToCookie(vcId);
+        upvoteButton.disabled = true;
+      })
+      .catch((error) => {
+        console.error('Error updating upvotes:', error);
+      });
+  });
+</script>
