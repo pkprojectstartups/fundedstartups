@@ -1,0 +1,19 @@
+---
+layout: null
+---
+[
+  {% for startup in site.startups %}
+  {
+    "id": "{{ startup.url | relative_url }}",
+    "title": "{{ startup.title | escape }}",
+    "search_title": "{{ startup.title | downcase }}",
+    "markets": "{{ startup.markets | escape }}",
+    "search_markets": "{{ startup.markets | downcase | escape }}",
+    "investors": "{{ startup.investors | escape }}",
+    "search_investors": "{{ startup.investors | downcase | escape }}",
+    "hq": "{{ startup.hq | escape }}",
+    "funding_round": "{{ startup.funding_round | escape }}",
+    "funding_amount": "{{ startup.funding_amount | escape }}"
+  }{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+]

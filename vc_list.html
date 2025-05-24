@@ -1,0 +1,30 @@
+---
+layout: default
+title: "Explore Custom VC Lists"
+---
+
+<div class="container my-5">
+  <!-- Header Section -->
+  <header class="text-center mb-5">
+    <h1 class="fw-bold">Explore Custom VC Lists</h1>
+    <p class="text-muted">Discover curated lists of venture capital firms tailored to specific markets, stages, and industries.</p>
+  </header>
+
+  <!-- Custom Lists Grid -->
+  <div class="row" id="custom-lists-grid">
+    {% for list in site.custom_lists %}
+      {% if list.url contains "/index.html" %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <a href="{{ list.url | relative_url }}" class="text-decoration-none">
+            <div class="card shadow-sm h-100 vc-card">
+              <div class="card-body">
+                <h5 class="card-title">{{ list.title }}</h5>
+                <p class="card-text text-muted">{{ list.meta_description }}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

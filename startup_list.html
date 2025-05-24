@@ -1,0 +1,31 @@
+---
+layout: default
+title: "Explore Funded Startups Lists"
+---
+
+<div class="container my-5">
+  <!-- Header Section -->
+  <header class="text-center mb-5">
+    <h1 class="fw-bold">Explore Funded Startups Lists</h1>
+    <p class="text-muted">Browse curated lists of startups that recently raised funding, grouped by market, industry, or funding stage.</p>
+  </header>
+
+  <!-- Custom Lists Grid -->
+  <div class="row" id="funded-startups-lists-grid">
+    {% for list in site.custom_lists %}
+      {% if list.url contains "/index.html" %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <a href="{{ list.url | relative_url }}" class="text-decoration-none">
+            <div class="card shadow-sm h-100 vc-card">
+              <div class="card-body">
+                <h5 class="card-title">{{ list.title }}</h5>
+                <p class="card-text text-muted">{{ list.meta_description }}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+

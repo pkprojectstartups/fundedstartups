@@ -1,0 +1,29 @@
+---
+layout: null
+---
+[
+  {%- assign filter_values = "Crypto, Blockchain, Web3" | split: ", " -%}
+  {%- assign first = true -%}
+  {%- for startup in site.startups -%}
+    {%- assign startup_values = startup.markets | split: ", " -%}
+    {%- for value in filter_values -%}
+      {%- if startup_values contains value -%}
+        {%- if first == false -%},{%- endif -%}
+        {
+          "id": "{{ startup.url | relative_url }}",
+          "title": "{{ startup.title | escape }}",
+          "search_title": "{{ startup.title | downcase }}",
+          "markets": "{{ startup.markets | escape }}",
+          "search_markets": "{{ startup.markets | downcase | escape }}",
+          "hq": "{{ startup.hq | escape }}",
+          "funding_round": "{{ startup.funding_round | escape }}",
+          "funding_amount": "{{ startup.funding_amount | escape }}",
+          "investors": "{{ startup.investors | escape }}",
+          "search_investors": "{{ startup.investors | downcase | escape }}"
+        }
+        {%- assign first = false -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+]
