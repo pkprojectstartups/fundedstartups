@@ -10,13 +10,14 @@ import {
 
 // Firebase config — replace with your actual keys
 const firebaseConfig = {
-  apiKey: "AIzaSyDV...jWQ",
-  authDomain: "startup-directory.firebaseapp.com",
-  databaseURL: "https://startup-directory-default-rtdb.firebaseio.com",
-  projectId: "startup-directory",
-  storageBucket: "startup-directory.appspot.com",
-  messagingSenderId: "867812067438",
-  appId: "1:867812067438:web:5e7dfbdfec7ce6a22bd1b1",
+  apiKey: "AIzaSyAv-M8IC5eC2Gp73wcKdgkqSLng_ze37i0",
+  authDomain: "fundedstartups-61ab9.firebaseapp.com",
+  databaseURL: "https://fundedstartups-61ab9-default-rtdb.firebaseio.com",
+  projectId: "fundedstartups-61ab9",
+  storageBucket: "fundedstartups-61ab9.firebasestorage.app",
+  messagingSenderId: "763075463662",
+  appId: "1:763075463662:web:1402044bfb3d91e06126ff",
+  measurementId: "G-D8C6PVJ21F"
 };
 
 const app = initializeApp(firebaseConfig);
