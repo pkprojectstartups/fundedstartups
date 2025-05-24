@@ -1,264 +1,43 @@
 ---
 layout: default
-permalink: /projectstartups.com/{{ page.slug }}/
 ---
 
-<div class="container py-5">
-  <div class="row">
-    <div class="col-lg-8 mx-auto">
-      <div class="card mb-4 shadow-lg">
-        <div class="card-body">
-
-          <!-- Header Section -->
-          <div class="text-center mb-4">
-            <h1 class="card-title display-5">{{ page.title }}</h1>
-            <button id="upvoteButton" class="btn btn-outline-success btn-lg mt-3">
-              + <span id="upvoteCount">0</span> Upvotes
-            </button>
-          </div>
-
-          <!-- Startup Information -->
-          <div class="startup-info">
-
-            {% if page.about %}
-              <p><strong>About:</strong> {{ page.about }}</p>
-            {% endif %}
-
-            {% if page.markets %}
-              <p><strong>Markets:</strong> {{ page.markets }}</p>
-            {% endif %}
-
-            {% if page.investors %}
-              <p><strong>Investors:</strong> {{ page.investors }}</p>
-            {% endif %}
-
-            {% if page.funding_round %}
-              <p><strong>Funding Round:</strong> {{ page.funding_round }}</p>
-            {% endif %}
-
-            {% if page.funding_amount %}
-              <p><strong>Funding Amount:</strong> {{ page.funding_amount }}</p>
-            {% endif %}
-
-            {% if page.hq %}
-              <p><strong>Headquarters:</strong> {{ page.hq }}</p>
-            {% endif %}
-
-            {% if page.founded_year %}
-              <p><strong>Founded Year:</strong> {{ page.founded_year }}</p>
-            {% endif %}
-
-            {% if page.website %}
-              <p><strong>Website:</strong> <a href="{{ page.website }}" target="_blank" rel="noopener noreferrer">{{ page.website }}</a></p>
-            {% endif %}
-
-            {% if page.linkedin %}
-              <p><strong>LinkedIn:</strong> <a href="{{ page.linkedin }}" target="_blank" rel="noopener noreferrer">{{ page.linkedin }}</a></p>
-            {% endif %}
-
-            {% if page.twitter %}
-              <p><strong>Twitter:</strong> <a href="{{ page.twitter }}" target="_blank" rel="noopener noreferrer">{{ page.twitter }}</a></p>
-            {% endif %}
-
-            {% if page.instagram %}
-              <p><strong>Instagram:</strong> <a href="{{ page.instagram }}" target="_blank" rel="noopener noreferrer">{{ page.instagram }}</a></p>
-            {% endif %}
-
-            {% if page.facebook %}
-              <p><strong>Facebook:</strong> <a href="{{ page.facebook }}" target="_blank" rel="noopener noreferrer">{{ page.facebook }}</a></p>
-            {% endif %}
-
-            {% if page.crunchbase %}
-              <p><strong>Crunchbase:</strong> <a href="{{ page.crunchbase }}" target="_blank" rel="noopener noreferrer">{{ page.crunchbase }}</a></p>
-            {% endif %}
-
-            {% if page.pitchbook %}
-              <p><strong>Pitchbook:</strong> <a href="{{ page.pitchbook }}" target="_blank" rel="noopener noreferrer">{{ page.pitchbook }}</a></p>
-            {% endif %}
-
-          </div>
-
-          <hr class="my-4">
-
-          <!-- Comments Section -->
-          <h2 class="mb-4">Leave a Comment</h2>
-          <form id="commentForm">
-            <div class="mb-3">
-              <label for="username" class="form-label">Your Name</label>
-              <input type="text" id="username" class="form-control" placeholder="Your Name" required>
-            </div>
-            <div class="mb-3">
-              <label for="comment" class="form-label">Your Comment</label>
-              <textarea id="comment" class="form-control" rows="4" placeholder="Your Comment" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg">Post Comment</button>
-            <p id="commentStatus" class="mt-3 text-success" style="display: none;">Commented successfully!</p>
-          </form>
-
-          <!-- Display Comments -->
-          <div id="commentsContainer" class="mt-5">
-            <h2 class="mb-3" id="commentsTitle" style="display: none;">Comments</h2>
-            <p id="noCommentsText" class="text-muted" style="display: none;">No comments yet. Be the first to comment!</p>
-            <ul id="commentsList" class="list-group"></ul>
-          </div>
-
-        </div>
-      </div>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ page.title }}</title>
+    <script type="module" src="/assets/js/firebase-interaction.js"></script>
+    <style>
+      .comment-box, .comment-list {
+        margin-top: 1rem;
+      }
+      .comment {
+        border: 1px solid #ccc;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+    </style>
+  </head>
+  <body data-startup-key="{{ page.id }}">
+    <h1>{{ page.title }}</h1>
+    <p>{{ page.description }}</p>
+    
+    <!-- Upvote Section -->
+    <div>
+      <button id="upvote-btn">Upvote</button>
+      <span id="upvote-count">Loading...</span>
     </div>
-  </div>
-</div>
 
-<!-- Firebase Script block remains unchanged -->
+    <!-- Comments Section -->
+    <div class="comment-box">
+      <textarea id="comment-text" placeholder="Leave a comment..."></textarea>
+      <br />
+      <button id="submit-comment">Submit Comment</button>
+    </div>
 
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-  import { getDatabase, ref, push, onValue, set, increment } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
-
-  // Firebase Configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyCAA588yxf40QdEJghoEQqfh37AK828MKw",
-    authDomain: "vc-comments.firebaseapp.com",
-    projectId: "vc-comments",
-    storageBucket: "vc-comments.appspot.com",
-    messagingSenderId: "114746372203",
-    appId: "1:114746372203:web:6b08497167b5a6c46dc12e"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const database = getDatabase(app);
-
-  function sanitizePath(path) {
-    return path.replace(/[.#$[\]]/g, '_');
-  }
-
-  function sanitizeInput(input) {
-    const div = document.createElement('div');
-    div.textContent = input;
-    return div.innerHTML;
-  }
-
-  const rawStartupId = "{{ page.id }}";
-  const startupId = sanitizePath(rawStartupId);
-
-  function setCookie(name, value, days) {
-    const date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
-  }
-
-  function getCookie(name) {
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const cookies = decodedCookie.split(';');
-    name = name + "=";
-    for (let cookie of cookies) {
-      while (cookie.charAt(0) === ' ') {
-        cookie = cookie.substring(1);
-      }
-      if (cookie.indexOf(name) === 0) {
-        return cookie.substring(name.length, cookie.length);
-      }
-    }
-    return "";
-  }
-
-  function hasUpvoted(startupId) {
-    const upvotedStartups = getCookie("upvotedStartups");
-    if (!upvotedStartups) return false;
-    const upvotedArray = upvotedStartups.split(',');
-    return upvotedArray.includes(startupId);
-  }
-
-  function addUpvoteToCookie(startupId) {
-    const upvotedStartups = getCookie("upvotedStartups");
-    const upvotedArray = upvotedStartups ? upvotedStartups.split(',') : [];
-    if (!upvotedArray.includes(startupId)) {
-      upvotedArray.push(startupId);
-      setCookie("upvotedStartups", upvotedArray.join(','), 30);
-    }
-  }
-
-  // Handle Comment Form Submit
-  document.getElementById('commentForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const username = sanitizeInput(document.getElementById('username').value.trim());
-    const comment = sanitizeInput(document.getElementById('comment').value.trim());
-
-    if (username && comment && startupId) {
-      push(ref(database, `startup_comments/${startupId}`), {
-        username,
-        comment,
-        timestamp: Date.now()
-      }).then(() => {
-        document.getElementById('commentStatus').style.display = 'block';
-        document.getElementById('commentForm').reset();
-        setTimeout(() => {
-          document.getElementById('commentStatus').style.display = 'none';
-        }, 3000);
-      }).catch((error) => {
-        console.error('Error posting comment:', error);
-      });
-    } else {
-      alert('Please fill all fields!');
-    }
-  });
-
-  // Load Comments
-  onValue(ref(database, `startup_comments/${startupId}`), (snapshot) => {
-    const commentsList = document.getElementById('commentsList');
-    const commentsTitle = document.getElementById('commentsTitle');
-    const noCommentsText = document.getElementById('noCommentsText');
-
-    commentsList.innerHTML = '';
-    if (snapshot.exists()) {
-      commentsTitle.style.display = 'block';
-      noCommentsText.style.display = 'none';
-      snapshot.forEach(childSnapshot => {
-        const data = childSnapshot.val();
-        const listItem = document.createElement('li');
-        listItem.className = "list-group-item";
-        listItem.textContent = `${data.username}: ${data.comment}`;
-        commentsList.appendChild(listItem);
-      });
-    } else {
-      commentsTitle.style.display = 'none';
-      noCommentsText.style.display = 'block';
-    }
-  });
-
-  // Handle Upvotes
-  const upvoteCountRef = ref(database, `startup_upvotes/${startupId}/count`);
-
-  onValue(upvoteCountRef, (snapshot) => {
-    const upvoteCount = snapshot.val() || 0;
-    const upvoteButton = document.getElementById('upvoteButton');
-    upvoteButton.textContent = `+ ${upvoteCount}`;
-
-    if (hasUpvoted(startupId)) {
-      upvoteButton.disabled = true;
-    } else {
-      upvoteButton.disabled = false;
-    }
-  });
-
-  document.getElementById('upvoteButton').addEventListener('click', () => {
-    const upvoteButton = document.getElementById('upvoteButton');
-
-    if (hasUpvoted(startupId)) {
-      upvoteButton.disabled = true;
-      return;
-    }
-
-    const upvoteRef = ref(database, `startup_upvotes/${startupId}/count`);
-
-    set(upvoteRef, increment(1))
-      .then(() => {
-        addUpvoteToCookie(startupId);
-        upvoteButton.disabled = true;
-      })
-      .catch((error) => {
-        console.error('Error updating upvotes:', error);
-      });
-  });
-</script>
+    <div class="comment-list" id="comments-container">
+      <p>Loading comments...</p>
+    </div>
+  </body>
+</html>
