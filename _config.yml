@@ -1,0 +1,33 @@
+# Basic Site Settings
+title: "projectstartups.com"
+description: "projectstartups.com supports startups by offering an open-access VC database, a comprehensive directory of funded startups, and other valuable resources."
+baseurl: ""  # <-- IMPORTANT: Your GitHub Pages repo name
+url: "https://pkprojectstartups.github.io"  # <-- Your GitHub Pages URL
+
+# Theme Settings
+theme: minima
+
+styles:
+  - assets/css/style.css
+
+# Collections
+collections:
+  vc_firms:
+    output: true  # Ensures individual VC firm pages are generated
+    permalink: /:title/  # Pretty URLs based on firm title
+  startups:            # <--- ADD THIS NEW BLOCK
+    output: true
+    permalink: /:title/
+  custom_lists:
+    output: true  # Ensures custom list pages are generated
+
+# Markdown Configuration
+markdown: kramdown
+kramdown:
+  input: GFM  # GitHub Flavored Markdown
+
+# Permalinks
+permalink: pretty  # Clean URLs
+
+include:
+  - search.json
