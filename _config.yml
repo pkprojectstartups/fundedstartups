@@ -31,3 +31,4 @@ permalink: pretty  # Clean URLs
 
 include:
   - search.json
+#sitemap:
