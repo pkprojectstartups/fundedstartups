@@ -2,8 +2,9 @@
 layout: default
 ---
 
-<div class="container py-5">
-  <h1 class="mb-4 text-center">Funded Startups</h1>
+<div class="container my-5">
+  <h1>{{ page.title }}</h1>
+  <p>{{ page.meta_description }}</p>
 
   {% assign filter_key = page.filter.key %}
   {% assign filter_values = page.filter.value | downcase | split: ", " %}
@@ -28,8 +29,7 @@ layout: default
   {% assign current_page = page.current_page | default: 1 %}
   {% assign per_page = page.per_page | default: 10 %}
   {% assign total_pages = filtered_startups.size | divided_by: per_page | ceil %}
-  {% assign previous_pages_count = current_page | minus: 1 %}
-  {% assign start_index = previous_pages_count | times: per_page %}
+  {% assign start_index = per_page | times: current_page | minus: per_page %}
   {% assign paginated_startups = filtered_startups | slice: start_index, per_page %}
 
   <!-- Search Form -->
@@ -48,47 +48,54 @@ layout: default
   <!-- Top Buy CTA -->
   <div class="alert alert-success d-flex justify-content-between align-items-center p-3 mb-4">
     <div>
-      Want all <strong>{{ total_items }}</strong> VC firms in one file?
+      Want all funded startups in one file?
     </div>
-    <a href="/buy/" class="btn btn-success">Buy Full VC Database →</a>
+    <a href="/buy/" class="btn btn-success">Buy Full Funded Startups Database →</a>
   </div>
 
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+  <div class="row">
     {% for startup_url in paginated_startups %}
       {% assign startup = site.startups | where: "url", startup_url | first %}
       {% if startup %}
-        {% assign startup_id = startup.url | remove: "/" | replace: " ", "-" %}
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body position-relative">
-              <h5 class="card-title">
-                <a href="{{ startup.url | relative_url }}" class="text-decoration-none">
-                  {{ startup.title }}
-                </a>
-              </h5>
-              {% if startup.description %}
-                <p class="card-text">{{ startup.description | truncate: 100 }}</p>
-              {% endif %}
+        {% assign startup_id = startup.permalink | remove: "/" | replace: ".", "_" %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-sm h-100 startup-card position-relative">
+            <a href="{{ startup.url | relative_url }}" class="text-decoration-none card-link" aria-label="{{ startup.title }}">
+              <div class="card-body">
+                <h5 class="card-title">{{ startup.title }}</h5>
+                <p class="card-text text-muted">
+                  {% if startup.funding_round %}
+                    <strong>Funding Round:</strong> {{ startup.funding_round }}<br>
+                  {% endif %}
+                  {% if startup.funding_amount %}
+                    <strong>Amount:</strong> {{ startup.funding_amount }}<br>
+                  {% endif %}
+                  {% if startup.investors %}
+                    <strong>Investors:</strong>
+                    {% assign investor_list = startup.investors | split: "," %}
+                    {{ investor_list | slice: 0, 3 | join: ", " }}{% if investor_list.size > 3 %}...{% endif %}<br>
+                  {% endif %}
+                  {% if startup.markets %}
+                    <strong>Markets:</strong>
+                    {% assign market_list = startup.markets | split: "," %}
+                    {{ market_list | slice: 0, 3 | join: ", " }}{% if market_list.size > 3 %}...{% endif %}<br>
+                  {% endif %}
+                  {% if startup.hq %}
+                    <strong>HQ:</strong> {{ startup.hq }}
+                  {% endif %}
+                </p>
+              </div>
+            </a>
 
-              <button
-                class="btn btn-sm btn-outline-primary upvote-button position-absolute top-0 end-0 m-2 py-0 px-2"
-                data-startup-id="{{ startup_id }}"
-                title="Upvote this startup"
-                style="font-size: 0.75rem;"
-              >
-                ▲ <span class="upvote-count" data-startup-id="{{ startup_id }}">0</span>
-              </button>
-            </div>
-
-            <div class="card-footer bg-transparent border-top-0">
-              {% if startup.tags %}
-                <div class="d-flex flex-wrap gap-1">
-                  {% for tag in startup.tags %}
-                    <span class="badge bg-secondary">{{ tag }}</span>
-                  {% endfor %}
-                </div>
-              {% endif %}
-            </div>
+            <!-- Upvote Button -->
+            <button
+              class="btn btn-sm btn-outline-primary upvote-button position-absolute top-0 end-0 m-2 py-0 px-2"
+              data-startup-id="{{ startup_id }}"
+              title="Upvote this startup"
+              style="font-size: 0.75rem;"
+            >
+              ▲ <span class="upvote-count" data-startup-id="{{ startup_id }}">0</span>
+            </button>
           </div>
         </div>
       {% endif %}
@@ -114,32 +121,17 @@ layout: default
         <li class="page-item disabled"><span class="page-link">&laquo; Previous</span></li>
       {% endif %}
 
-      {% if current_page > 4 %}
-        <li class="page-item"><a class="page-link" href="{{ base_url }}page1">1</a></li>
-        <li class="page-item disabled"><span class="page-link">...</span></li>
-      {% endif %}
-
-      {% assign range_start = current_page | minus: 2 %}
-      {% assign range_end = current_page | plus: 2 %}
-      {% if range_start < 1 %}{% assign range_start = 1 %}{% endif %}
-      {% if range_end > total_pages %}{% assign range_end = total_pages %}{% endif %}
-
-      {% for page_num in (range_start..range_end) %}
-        <li class="page-item {% if page_num == current_page %}active{% endif %}">
-          <a class="page-link" href="{{ base_url }}page{{ page_num }}">{{ page_num }}</a>
+      {% assign range_start = current_page | minus: 2 | at_least: 1 %}
+      {% assign range_end = current_page | plus: 2 | at_most: total_pages %}
+      {% for i in (range_start..range_end) %}
+        <li class="page-item {% if i == current_page %}active{% endif %}">
+          <a class="page-link" href="{{ base_url }}page{{ i }}">{{ i }}</a>
         </li>
       {% endfor %}
 
-      {% assign trailing_threshold = total_pages | minus: 3 %}
-      {% if current_page < trailing_threshold %}
-        <li class="page-item disabled"><span class="page-link">...</span></li>
-        <li class="page-item"><a class="page-link" href="{{ base_url }}page{{ total_pages }}">{{ total_pages }}</a></li>
-      {% endif %}
-
       {% if current_page < total_pages %}
-        {% assign next_page = current_page | plus: 1 %}
         <li class="page-item">
-          <a class="page-link" href="{{ base_url }}page{{ next_page }}">Next &raquo;</a>
+          <a class="page-link" href="{{ base_url }}page{{ current_page | plus: 1 }}">Next &raquo;</a>
         </li>
       {% else %}
         <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
@@ -150,9 +142,9 @@ layout: default
   <!-- Bottom Buy CTA -->
   <div class="text-center mt-5">
     <p class="fw-semibold">Looking to save time?</p>
-    <a href="/buy/" class="btn btn-outline-dark btn-sm">Download All VC Firms in CSV – $45</a>
+    <a href="/buy/" class="btn btn-outline-dark btn-sm">Download All Funded Startups in CSV – $45</a>
   </div>
 </div>
 
-<!-- Firebase Upvote Script -->
+<!-- Upvote Script -->
 <script type="module" src="{{ '/assets/js/card-upvotes.js' | relative_url }}"></script>

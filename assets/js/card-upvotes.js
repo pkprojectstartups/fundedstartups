@@ -8,47 +8,48 @@ import {
 
 // Firebase Config
 const firebaseConfig = {
-  apiKey: "AIzaSyCAA588yxf40QdEJghoEQqfh37AK828MKw",
-  authDomain: "vc-comments.firebaseapp.com",
-  databaseURL: "https://vc-comments-default-rtdb.firebaseio.com",
-  projectId: "vc-comments",
-  storageBucket: "vc-comments.appspot.com",
-  messagingSenderId: "114746372203",
-  appId: "1:114746372203:web:6b08497167b5a6c46dc12e"
+  apiKey: "AIzaSyAv-M8IC5eC2Gp73wcKdgkqSLng_ze37i0",
+  authDomain: "fundedstartups-61ab9.firebaseapp.com",
+  databaseURL: "https://fundedstartups-61ab9-default-rtdb.firebaseio.com",
+  projectId: "fundedstartups-61ab9",
+  storageBucket: "fundedstartups-61ab9.firebasestorage.app",
+  messagingSenderId: "763075463662",
+  appId: "1:763075463662:web:1402044bfb3d91e06126ff",
+  measurementId: "G-D8C6PVJ21F"
 };
 
 const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+const db = getDatabase(app);
 
-// Cookie Helpers
+// Cookie helpers
 function hasUpvoted(id) {
   return document.cookie.includes(`upvote_${id}=1`);
 }
 function addUpvoteToCookie(id) {
-  document.cookie = `upvote_${id}=1; path=/; max-age=31536000`;
+  document.cookie = `upvote_${id}=1; path=/; max-age=31536000`; // 1 year
 }
 
-// Init Upvotes
+// Initialize all upvote buttons
 function initStartupCardUpvotes() {
   const buttons = document.querySelectorAll(".upvote-button");
-  console.log("Found", buttons.length, "startup upvote buttons");
+  if (!buttons.length) return;
 
   buttons.forEach((button) => {
     const id = button.getAttribute("data-startup-id");
     const countEl = document.querySelector(`.upvote-count[data-startup-id="${id}"]`);
-    const upvoteRef = ref(database, `startup_upvotes/${id}/count`);
+    const upvoteRef = ref(db, `upvotes/${id}/count`);
 
+    // Load current upvote count
     onValue(upvoteRef, (snapshot) => {
       const count = snapshot.val() || 0;
       if (countEl) countEl.textContent = count;
       button.disabled = hasUpvoted(id);
-    }, (error) => {
-      console.error("Firebase read error:", error);
     });
 
-    button.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
+    // Handle upvote click
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       if (hasUpvoted(id)) return;
 
       runTransaction(upvoteRef, (current) => (current || 0) + 1)
@@ -56,8 +57,8 @@ function initStartupCardUpvotes() {
           addUpvoteToCookie(id);
           button.disabled = true;
         })
-        .catch((error) => {
-          console.error("Upvote transaction failed:", error);
+        .catch((err) => {
+          console.error("Upvote failed:", err);
         });
     });
   });

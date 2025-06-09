@@ -7,27 +7,29 @@ layout: default
 <div class="container py-5" data-startup-key="{{ startup_key }}">
   <div class="row">
     <div class="col-lg-8 mx-auto">
-      <div class="card mb-4 shadow-lg">
+      <div class="card mb-4 shadow-sm">
         <div class="card-body">
-          <!-- Header Section -->
           <div class="text-center mb-4">
-            <h1 class="card-title display-5">{{ page.title }}</h1>
+            <h1 class="display-5">{{ page.title }}</h1>
             {% if page.about %}
-              <p class="lead mt-2">{{ page.about }}</p>
+              <p class="lead">{{ page.about }}</p>
             {% endif %}
             <button id="upvoteButton" class="btn btn-outline-success btn-lg mt-3">
               + <span id="upvoteCount">0</span> Upvotes
             </button>
+			  <br>
+  <a href="/buy/" target="_blank" class="btn btn-outline-primary btn-lg mt-3">
+    Buy Full Funded Startups Dataset
+  </a>
           </div>
 
-          <!-- Startup Info -->
           <div class="startup-info">
             {% if page.funding_round %}<p><strong>Funding Round:</strong> {{ page.funding_round }}</p>{% endif %}
             {% if page.funding_amount %}<p><strong>Funding Amount:</strong> {{ page.funding_amount }}</p>{% endif %}
             {% if page.investors %}<p><strong>Investors:</strong> {{ page.investors }}</p>{% endif %}
             {% if page.markets %}<p><strong>Markets:</strong> {{ page.markets }}</p>{% endif %}
-            {% if page.hq %}<p><strong>Headquarters:</strong> {{ page.hq }}</p>{% endif %}
-            {% if page.founded_year %}<p><strong>Founded Year:</strong> {{ page.founded_year }}</p>{% endif %}
+            {% if page.hq %}<p><strong>HQ:</strong> {{ page.hq }}</p>{% endif %}
+            {% if page.founded_year %}<p><strong>Founded:</strong> {{ page.founded_year }}</p>{% endif %}
             {% if page.website %}<p><strong>Website:</strong> <a href="{{ page.website }}" target="_blank">{{ page.website }}</a></p>{% endif %}
             {% if page.linkedin %}<p><strong>LinkedIn:</strong> <a href="{{ page.linkedin }}" target="_blank">{{ page.linkedin }}</a></p>{% endif %}
             {% if page.twitter %}<p><strong>Twitter:</strong> <a href="{{ page.twitter }}" target="_blank">{{ page.twitter }}</a></p>{% endif %}
@@ -36,28 +38,36 @@ layout: default
             {% if page.crunchbase %}<p><strong>Crunchbase:</strong> <a href="{{ page.crunchbase }}" target="_blank">{{ page.crunchbase }}</a></p>{% endif %}
             {% if page.pitchbook %}<p><strong>Pitchbook:</strong> <a href="{{ page.pitchbook }}" target="_blank">{{ page.pitchbook }}</a></p>{% endif %}
           </div>
+		  
+		  
+ <div class="text-center mt-4">
+  <a href="/buy/" target="_blank" class="btn btn-primary btn-lg">
+    Download Full Funded Startups Dataset
+  </a>
+</div>
 
-          <hr class="my-4">
+          <hr class="my-4" />
 
-          <!-- Comments Section -->
-          <h2 class="mb-4">Leave a Comment</h2>
-          <form id="commentForm">
-            <div class="mb-3">
-              <label for="username" class="form-label">Your Name</label>
-              <input type="text" id="username" class="form-control" placeholder="Your Name" required>
+          <div id="comment-section">
+            <h2>Leave a Comment</h2>
+            <form id="commentForm">
+              <div class="mb-3">
+                <label for="username" class="form-label">Name</label>
+                <input type="text" id="username" class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="comment" class="form-label">Comment</label>
+                <textarea id="comment" class="form-control" rows="4" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Post Comment</button>
+              <p id="commentStatus" class="mt-2 text-success" style="display: none;">Commented successfully!</p>
+            </form>
+
+            <div id="commentsContainer" class="mt-5">
+              <h2 class="mb-3" id="commentsTitle" style="display: none;">Comments</h2>
+              <p id="noCommentsText" class="text-muted" style="display: none;">No comments yet.</p>
+              <ul id="commentsList" class="list-group"></ul>
             </div>
-            <div class="mb-3">
-              <label for="comment" class="form-label">Your Comment</label>
-              <textarea id="comment" class="form-control" rows="4" placeholder="Your Comment" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg">Post Comment</button>
-            <p id="commentStatus" class="mt-3 text-success" style="display: none;">Commented successfully!</p>
-          </form>
-
-          <div id="commentsContainer" class="mt-5">
-            <h2 class="mb-3" id="commentsTitle" style="display: none;">Comments</h2>
-            <p id="noCommentsText" class="text-muted" style="display: none;">No comments yet. Be the first to comment!</p>
-            <ul id="commentsList" class="list-group"></ul>
           </div>
         </div>
       </div>

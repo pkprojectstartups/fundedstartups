@@ -26,16 +26,14 @@ per_page: 30
   <p class="text-muted mb-4">
     Showing <strong>{{ total_items }}</strong> funded startups.
   </p>
-  
-  <!-- Top Buy CTA -->
-<div class="alert alert-success d-flex justify-content-between align-items-center p-3 mb-4">
-  <div>
-    Want all <strong>{{ total_items }}</strong> VC firms in one file?
-  </div>
-  <a href="/buy/" class="btn btn-success">Buy Full VC Database →</a>
-</div>
 
-  <!-- Startups Grid -->
+  <div class="alert alert-success d-flex justify-content-between align-items-center p-3 mb-4">
+    <div>
+      Want all <strong>{{ total_items }}</strong> Funded Startups in one file?
+    </div>
+    <a href="/buy/" class="btn btn-success">Buy Full Funded Startups Database →</a>
+  </div>
+
   <div class="row">
     {% for startup in paginated_items %}
     {% assign startup_id = startup.permalink | remove: "/" | replace: ".", "_" %}
@@ -82,57 +80,34 @@ per_page: 30
     {% endfor %}
   </div>
 
-  <!-- Pagination Controls -->
+  <!-- Pagination -->
   <nav class="d-flex justify-content-center mt-4">
     <ul class="pagination">
       {% if current_page > 1 %}
-        {% assign prev_page = current_page | minus: 1 %}
-        <li class="page-item">
-          <a class="page-link" href="{{ site.baseurl }}/page{{ prev_page }}">&laquo; Previous</a>
-        </li>
+        <li class="page-item"><a class="page-link" href="{{ site.baseurl }}/page{{ current_page | minus: 1 }}">&laquo; Previous</a></li>
       {% else %}
         <li class="page-item disabled"><span class="page-link">&laquo; Previous</span></li>
       {% endif %}
 
-      {% if current_page > 4 %}
-        <li class="page-item"><a class="page-link" href="{{ site.baseurl }}/page1">1</a></li>
-        <li class="page-item disabled"><span class="page-link">...</span></li>
-      {% endif %}
+      {% assign range_start = current_page | minus: 2 | at_least: 1 %}
+      {% assign range_end = current_page | plus: 2 | at_most: total_pages %}
 
-      {% assign range_start = current_page | minus: 2 %}
-      {% assign range_end = current_page | plus: 2 %}
-      {% if range_start < 1 %}{% assign range_start = 1 %}{% endif %}
-      {% if range_end > total_pages %}{% assign range_end = total_pages %}{% endif %}
-
-      {% for page in (range_start..range_end) %}
-        <li class="page-item {% if page == current_page %}active{% endif %}">
-          <a class="page-link" href="{{ site.baseurl }}/page{{ page }}">{{ page }}</a>
-        </li>
+      {% for i in (range_start..range_end) %}
+        <li class="page-item {% if i == current_page %}active{% endif %}"><a class="page-link" href="{{ site.baseurl }}/page{{ i }}">{{ i }}</a></li>
       {% endfor %}
 
-      {% assign trailing_threshold = total_pages | minus: 3 %}
-      {% if current_page < trailing_threshold %}
-        <li class="page-item disabled"><span class="page-link">...</span></li>
-        <li class="page-item">
-          <a class="page-link" href="{{ site.baseurl }}/page{{ total_pages }}">{{ total_pages }}</a>
-        </li>
-      {% endif %}
-
       {% if current_page < total_pages %}
-        {% assign next_page = current_page | plus: 1 %}
-        <li class="page-item"><a class="page-link" href="{{ site.baseurl }}/page{{ next_page }}">Next &raquo;</a></li>
+        <li class="page-item"><a class="page-link" href="{{ site.baseurl }}/page{{ current_page | plus: 1 }}">Next &raquo;</a></li>
       {% else %}
         <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
       {% endif %}
     </ul>
   </nav>
-  
-    <!-- Bottom Buy CTA -->
-<div class="text-center mt-5">
-  <p class="fw-semibold">Looking to save time?</p>
-  <a href="/buy/" class="btn btn-outline-dark btn-sm">Download All VC Firms in CSV – $45</a>
-</div>
 
+  <div class="text-center mt-5">
+    <p class="fw-semibold">Looking to save time?</p>
+    <a href="/buy/" class="btn btn-outline-dark btn-sm">Download All Funded Startups in CSV – $45</a>
+  </div>
 </div>
 
 <!-- Upvote Script -->
