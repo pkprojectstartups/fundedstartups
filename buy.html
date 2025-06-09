@@ -1,0 +1,62 @@
+---
+layout: default
+title: Buy Funded Startups Lists
+meta_title: Buy Funded Startups Lists
+meta_description: Purchase curated lists of funded startups categorized by sector, region, and funding rounds.
+permalink: /buy
+---
+
+<!-- Page Heading -->
+<div class="container my-5">
+  <h1 class="display-5 fw-bold">Buy Funded Startups Lists</h1>
+  <p class="lead mt-3">
+    Instantly download curated lists of recently funded startups across sectors, countries, and funding rounds.
+  </p>
+  <p class="text-muted">
+    Each list includes data like <strong>Startup Name</strong>, <strong>Website</strong>, <strong>Markets</strong>, <strong>Funding Round</strong>, <strong>Funding Amount</strong>, <strong>Investors</strong>, <strong>LinkedIn</strong>, <strong>Crunchbase</strong>, and more — perfect for researchers, growth teams, and founders.
+  </p>
+  <div class="alert alert-success mt-4 d-inline-block px-4 py-2">
+    ⚡ Instant download &mdash; No signup required
+  </div>
+</div>
+
+<!-- Lists Grid -->
+<div class="container mb-5">
+  <div class="row">
+    {% assign products =
+      "Funded Startups Full Database|2200|$40|https://payhip.com/b/full-funded-db|Complete dataset of 2200+ funded startups worldwide.||| 
+      Seed Round Startups|830|$15|https://payhip.com/b/seed-funded|Startups that raised recent Seed rounds.||| 
+      Series A Startups|540|$18|https://payhip.com/b/seriesa-funded|Startups with Series A funding in 2023–2024.||| 
+      Series B Startups|312|$14|https://payhip.com/b/seriesb-funded|Growth-stage startups with Series B funding.||| 
+      Fintech Funded Startups|410|$16|https://payhip.com/b/fintech-funded|Startups in payments, lending, neobanks & more.||| 
+      Healthtech Funded Startups|355|$15|https://payhip.com/b/health-funded|Recently funded healthcare and wellness startups.||| 
+      AI Funded Startups|295|$13|https://payhip.com/b/ai-funded|Startups working in AI/ML with recent funding.||| 
+      India Funded Startups|225|$11|https://payhip.com/b/india-funded|Recently funded startups from India.||| 
+      USA Funded Startups|1085|$25|https://payhip.com/b/usa-funded|Funded startups across all U.S. states.||| 
+      B2B Funded Startups|710|$17|https://payhip.com/b/b2b-funded|Funded startups with enterprise and SaaS focus."
+      | split: "|||"
+    %}
+
+    {% for item in products %}
+      {% assign parts = item | split: "|" %}
+      {% assign name = parts[0] %}
+      {% assign count = parts[1] %}
+      {% assign price = parts[2] %}
+      {% assign url = parts[3] | strip %}
+      {% assign description = parts[4] %}
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <a href="{{ url }}" target="_blank" class="text-decoration-none text-reset">
+          <div class="card shadow-sm h-100 position-relative border border-light-subtle">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title text-primary">{{ name }}</h5>
+              <p class="card-text text-muted">{{ description }}</p>
+              <p class="mt-auto">{{ count }} Startups</p>
+              <div class="btn btn-sm btn-primary mt-2 w-100">Buy Now for {{ price }}</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>

@@ -1,12 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-import {
-  getDatabase,
-  ref,
-  onValue,
-  push,
-  set,
-  runTransaction
-} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+import { getDatabase, ref, get, set, update, onValue, push } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js';
 
 // Firebase config — replace with your actual keys
 const firebaseConfig = {
@@ -18,70 +11,72 @@ const firebaseConfig = {
   messagingSenderId: "763075463662",
   appId: "1:763075463662:web:1402044bfb3d91e06126ff",
   measurementId: "G-D8C6PVJ21F"
-};
+};};
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Detect if we're on a startup or firm page
-const body = document.body;
-const startupId = body.dataset.startupKey || null;
-const vcId = body.dataset.vcKey || null;
+const startupKey = document.querySelector('[data-startup-key]')?.getAttribute('data-startup-key');
+const upvoteRef = ref(db, `startups/${startupKey}/upvotes`);
+const commentsRef = ref(db, `startups/${startupKey}/comments`);
 
-const entityId = startupId || vcId;
-const isStartup = Boolean(startupId);
+const upvoteCount = document.getElementById('upvoteCount');
+const upvoteButton = document.getElementById('upvoteButton');
+const commentForm = document.getElementById('commentForm');
+const commentStatus = document.getElementById('commentStatus');
+const commentsList = document.getElementById('commentsList');
+const commentsTitle = document.getElementById('commentsTitle');
+const noCommentsText = document.getElementById('noCommentsText');
 
-// Construct DB paths
-const commentPath = isStartup ? `startup_comments/${entityId}` : `comments/${entityId}`;
-const upvotePath = isStartup ? `startup_upvotes/${entityId}` : `upvotes/${entityId}`;
-
-// DOM Elements
-const upvoteBtn = document.getElementById("upvote-btn");
-const upvoteCountEl = document.getElementById("upvote-count");
-const commentInput = document.getElementById("comment-text");
-const submitBtn = document.getElementById("submit-comment");
-const commentsContainer = document.getElementById("comments-container");
-
-// Upvotes
-function setupUpvotes() {
-  const countRef = ref(db, `${upvotePath}/count`);
-  onValue(countRef, (snapshot) => {
+if (startupKey) {
+  // Display upvote count
+  onValue(upvoteRef, (snapshot) => {
     const count = snapshot.val() || 0;
-    upvoteCountEl.textContent = `${count} upvotes`;
+    upvoteCount.textContent = count;
   });
 
-  upvoteBtn?.addEventListener("click", () => {
-    runTransaction(countRef, (current) => (current || 0) + 1);
+  // Handle upvotes
+  upvoteButton?.addEventListener('click', async () => {
+    const snapshot = await get(upvoteRef);
+    const current = snapshot.exists() ? snapshot.val() : 0;
+    await set(upvoteRef, current + 1);
   });
-}
 
-// Comments
-function setupComments() {
-  const commentsRef = ref(db, commentPath);
+  // Handle comment submission
+  commentForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value.trim();
+    const comment = document.getElementById('comment').value.trim();
+    if (!username || !comment) return;
 
+    await push(commentsRef, {
+      username,
+      comment,
+      timestamp: Date.now()
+    });
+
+    commentForm.reset();
+    commentStatus.style.display = 'block';
+    setTimeout(() => commentStatus.style.display = 'none', 3000);
+  });
+
+  // Display comments
   onValue(commentsRef, (snapshot) => {
-    const comments = snapshot.val() || {};
-    commentsContainer.innerHTML = "";
-    Object.values(comments).forEach((comment) => {
-      const div = document.createElement("div");
-      div.className = "comment";
-      div.textContent = comment.text;
-      commentsContainer.appendChild(div);
+    commentsList.innerHTML = '';
+    if (!snapshot.exists()) {
+      noCommentsText.style.display = 'block';
+      commentsTitle.style.display = 'none';
+      return;
+    }
+
+    noCommentsText.style.display = 'none';
+    commentsTitle.style.display = 'block';
+    const comments = snapshot.val();
+    Object.values(comments).sort((a, b) => b.timestamp - a.timestamp).forEach(({ username, comment }) => {
+      const li = document.createElement('li');
+      li.className = 'list-group-item';
+      li.innerHTML = `<strong>${username}:</strong> ${comment}`;
+      commentsList.appendChild(li);
     });
   });
-
-  submitBtn?.addEventListener("click", () => {
-    const text = commentInput.value.trim();
-    if (!text) return;
-    const newCommentRef = push(ref(db, commentPath));
-    set(newCommentRef, { text });
-    commentInput.value = "";
-  });
 }
-
-// Init
-if (entityId) {
-  setupUpvotes();
-  setupComments();
-}
-

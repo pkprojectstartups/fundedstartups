@@ -50,6 +50,14 @@ layout: default
     Showing <strong>{{ filtered_startups.size }}</strong> startups matching the filter criteria.
   </p>
 
+<!-- Top Buy CTA -->
+<div class="alert alert-success d-flex justify-content-between align-items-center p-3 mb-4">
+  <div>
+    Want all <strong>{{ total_items }}</strong> VC firms in one file?
+  </div>
+  <a href="/buy/" class="btn btn-success">Buy Full VC Database →</a>
+</div>
+
   <div class="row">
     {% for startup_url in paginated_startups %}
       {% assign startup = site.startups | where: "url", startup_url | first %}
@@ -127,4 +135,11 @@ layout: default
       {% endif %}
     </ul>
   </nav>
+  
+  
+  <!-- Bottom Buy CTA -->
+<div class="text-center mt-5">
+  <p class="fw-semibold">Looking to save time?</p>
+  <a href="/buy/" class="btn btn-outline-dark btn-sm">Download All VC Firms in CSV – $45</a>
+</div>
 </div>
