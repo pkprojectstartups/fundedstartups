@@ -46,6 +46,13 @@ permalink: /custom_search.html
   const listName = jsonFile.replace(/\.json$/, '').replace(/_/g, ' ').toUpperCase();
   document.getElementById('list-name').textContent = listName;
 
+  function trimItems(text, maxCount) {
+    if (!text) return '—';
+    const items = text.split(',').map(i => i.trim()).filter(Boolean);
+    const trimmed = items.slice(0, maxCount).join(', ');
+    return items.length > maxCount ? trimmed + '...' : trimmed;
+  }
+
   fetch(`{{ site.baseurl }}/custom_search/${jsonFile}`)
     .then(response => response.json())
     .then(data => {
@@ -68,21 +75,25 @@ permalink: /custom_search.html
       if (results.length) {
         resultsContainer.innerHTML = results.map(result => {
           const item = data.find(doc => doc.id === result.ref);
+
+          const trimmedMarkets = trimItems(item.markets, 4);
+          const trimmedInvestors = trimItems(item.investors, 4);
+
           return `
-            <div class="card mb-3">
-              <div class="card-body">
-                <h5 class="card-title">
-                  <a href="${item.id}" class="text-decoration-none">${item.title}</a>
-                </h5>
-                <p class="card-text">
-                  HQ: ${item.hq || '—'}<br>
-                  Markets: ${item.markets || '—'}<br>
-                  Investors: ${item.investors || '—'}<br>
-                  Funding Round: ${item.funding_round || '—'}<br>
-                  Funding Amount: ${item.funding_amount || '—'}
-                </p>
+            <a href="${item.id}" class="text-decoration-none text-reset d-block mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title text-primary">${item.title}</h5>
+                  <p class="card-text">
+                    HQ: ${item.hq || '—'}<br>
+                    Markets: ${trimmedMarkets}<br>
+                    Investors: ${trimmedInvestors}<br>
+                    Funding Round: ${item.funding_round || '—'}<br>
+                    Funding Amount: ${item.funding_amount || '—'}
+                  </p>
+                </div>
               </div>
-            </div>
+            </a>
           `;
         }).join('');
       } else {

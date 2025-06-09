@@ -1,25 +1,46 @@
 ---
 layout: default
 title: "Explore Funded Startups Lists"
+meta_title: Explore Curated Funded Startup Lists by Market, Industry & Stage
+meta_description: Browse curated lists of recently funded startups by market, industry, and stage. Ideal for investors, founders, and analysts.
+permalink: /startup_list/
 ---
 
+<!-- Enhanced Page Heading (Left Aligned) -->
 <div class="container my-5">
-  <!-- Header Section -->
-  <header class="text-center mb-5">
-    <h1 class="fw-bold">Explore Funded Startups Lists</h1>
-    <p class="text-muted">Browse curated lists of startups that recently raised funding, grouped by market, industry, or funding stage.</p>
-  </header>
+  <h1 class="display-5 fw-bold">Explore Funded Startups Lists by Market, Stage & Region</h1>
+  <p class="lead mt-3">
+    Curated for <strong>investors</strong>, <strong>founders</strong>, and <strong>startup analysts</strong> tracking recently funded companies.
+  </p>
+  <p class="text-muted">
+    Each list includes key data like <strong>Startup Name</strong>, <strong>Website</strong>, <strong>Funding Round</strong>, 
+    <strong>Investors</strong>, <strong>Markets</strong>, <strong>LinkedIn</strong>, and <strong>HQ Location</strong> — saving you hours of research.
+  </p>
+  <div class="alert alert-info mt-4 d-inline-block px-4 py-2">
+    🧭 100% free to explore — no login or download required
+  </div>
 
-  <!-- Custom Lists Grid -->
+  <!-- Top Buy CTA -->
+  <div class="alert alert-success d-flex justify-content-between align-items-center p-3 mb-4">
+    <div>
+      Want all startups in one file?
+    </div>
+    <a href="/buy/startups/" class="btn btn-success">Buy Full Startups Database →</a>
+  </div>
+</div>
+
+<!-- Custom Lists Grid -->
+<div class="container mb-5">
   <div class="row" id="funded-startups-lists-grid">
     {% for list in site.custom_lists %}
       {% if list.url contains "/index.html" %}
         <div class="col-md-6 col-lg-4 mb-4">
-          <a href="{{ list.url | relative_url }}" class="text-decoration-none">
-            <div class="card shadow-sm h-100 vc-card">
-              <div class="card-body">
-                <h5 class="card-title">{{ list.title }}</h5>
-                <p class="card-text text-muted">{{ list.meta_description }}</p>
+          <a href="{{ list.url | relative_url }}" class="text-decoration-none text-dark">
+            <div class="card shadow-sm h-100 vc-card position-relative border border-light-subtle">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-primary">{{ list.title }}</h5>
+                <p class="card-text text-muted mt-2 flex-grow-1">{{ list.meta_description }}</p>
+                <div class="btn btn-sm btn-primary mt-2 w-100">View List</div>
               </div>
             </div>
           </a>
@@ -29,3 +50,8 @@ title: "Explore Funded Startups Lists"
   </div>
 </div>
 
+<!-- Bottom Teaser CTA -->
+<div class="container text-center mb-5">
+  <p class="fw-semibold">Want the full funded startups database?</p>
+  <a href="/buy/startups/" class="btn btn-outline-dark btn-sm">Get Full Startups List – $45</a>
+</div>

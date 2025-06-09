@@ -36,12 +36,19 @@ permalink: /search.html
 
 <!-- Lunr.js from CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+
 <script>
   const urlParams = new URLSearchParams(window.location.search);
   const query = urlParams.get('query');
   document.getElementById('search-query').textContent = query;
   document.querySelector('input[name="query"]').value = query;
+
+  function trimItems(text, maxCount) {
+    if (!text) return '';
+    const items = text.split(',').map(i => i.trim()).filter(Boolean);
+    const trimmed = items.slice(0, maxCount).join(', ');
+    return items.length > maxCount ? trimmed + '...' : trimmed;
+  }
 
   fetch('{{ site.baseurl }}/search.json')
     .then(response => response.json())
@@ -65,21 +72,25 @@ permalink: /search.html
       if (results.length) {
         resultsContainer.innerHTML = results.map(result => {
           const item = data.find(doc => doc.id === result.ref);
+
+          const trimmedMarkets = trimItems(item.markets, 4);
+          const trimmedInvestors = trimItems(item.investors, 4);
+
           return `
-            <div class="card mb-3">
-              <div class="card-body">
-                <h5 class="card-title">
-                  <a href="${item.id}" class="text-decoration-none">${item.title}</a>
-                </h5>
-                <p class="card-text">
-                  HQ: ${item.hq}<br>
-                  Markets: ${item.markets}<br>
-                  Investors: ${item.investors}<br>
-                  Funding Round: ${item.funding_round}<br>
-                  Funding Amount: ${item.funding_amount}
-                </p>
+            <a href="${item.id}" class="text-decoration-none text-reset d-block mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title text-primary">${item.title}</h5>
+                  <p class="card-text">
+                    ${item.hq ? `<strong>HQ:</strong> ${item.hq}<br>` : ''}
+                    ${trimmedMarkets ? `<strong>Markets:</strong> ${trimmedMarkets}<br>` : ''}
+                    ${trimmedInvestors ? `<strong>Investors:</strong> ${trimmedInvestors}<br>` : ''}
+                    ${item.funding_round ? `<strong>Funding Round:</strong> ${item.funding_round}<br>` : ''}
+                    ${item.funding_amount ? `<strong>Funding Amount:</strong> ${item.funding_amount}` : ''}
+                  </p>
+                </div>
               </div>
-            </div>
+            </a>
           `;
         }).join('');
       } else {
