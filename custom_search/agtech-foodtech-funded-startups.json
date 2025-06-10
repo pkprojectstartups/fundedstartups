@@ -1,0 +1,34 @@
+---
+layout: null
+---
+[
+  {%- assign filter_values = "agritech, food technology, agriculture, farming, dairy tech, alternative proteins, sustainable farming, foodtech, agtech" | split: ", " -%}
+  {%- assign first = true -%}
+  {%- for startup in site.startups -%}
+    {%- assign field_value = startup["markets"] | default: "" | downcase -%}
+    {%- assign match_found = false -%}
+    {%- for filter_value in filter_values -%}
+      {%- assign filter_value_clean = filter_value | strip -%}
+      {%- if field_value contains filter_value_clean -%}
+        {%- assign match_found = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if match_found -%}
+      {%- if first == false -%},{%- endif -%}
+      {
+        "id": "{{ startup.url | relative_url }}",
+        "title": "{{ startup.title | escape }}",
+        "search_title": "{{ startup.title | downcase }}",
+        "markets": "{{ startup.markets | escape }}",
+        "search_markets": "{{ startup.markets | downcase | escape }}",
+        "hq": "{{ startup.hq | escape }}",
+        "funding_round": "{{ startup.funding_round | escape }}",
+        "funding_amount": "{{ startup.funding_amount | escape }}",
+        "investors": "{{ startup.investors | escape }}",
+        "search_investors": "{{ startup.investors | downcase | escape }}"
+      }
+      {%- assign first = false -%}
+    {%- endif -%}
+  {%- endfor -%}
+]

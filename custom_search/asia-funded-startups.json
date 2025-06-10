@@ -1,0 +1,34 @@
+---
+layout: null
+---
+[
+  {%- assign filter_values = "afghanistan, armenia, azerbaijan, bahrain, bangladesh, bhutan, brunei, cambodia, china, cyprus, georgia, india, indonesia, iran, iraq, israel, japan, jordan, kazakhstan, kuwait, kyrgyzstan, laos, lebanon, malaysia, maldives, mongolia, myanmar, nepal, north korea, oman, pakistan, palestine, philippines, qatar, saudi arabia, singapore, south korea, sri lanka, syria, taiwan, tajikistan, thailand, timor-leste, turkey, turkmenistan, united arab emirates, uzbekistan, vietnam, yemen" | split: ", " -%}
+  {%- assign first = true -%}
+  {%- for startup in site.startups -%}
+    {%- assign field_value = startup["hq"] | default: "" | downcase -%}
+    {%- assign match_found = false -%}
+    {%- for filter_value in filter_values -%}
+      {%- assign filter_value_clean = filter_value | strip -%}
+      {%- if field_value contains filter_value_clean -%}
+        {%- assign match_found = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if match_found -%}
+      {%- if first == false -%},{%- endif -%}
+      {
+        "id": "{{ startup.url | relative_url }}",
+        "title": "{{ startup.title | escape }}",
+        "search_title": "{{ startup.title | downcase }}",
+        "markets": "{{ startup.markets | escape }}",
+        "search_markets": "{{ startup.markets | downcase | escape }}",
+        "hq": "{{ startup.hq | escape }}",
+        "funding_round": "{{ startup.funding_round | escape }}",
+        "funding_amount": "{{ startup.funding_amount | escape }}",
+        "investors": "{{ startup.investors | escape }}",
+        "search_investors": "{{ startup.investors | downcase | escape }}"
+      }
+      {%- assign first = false -%}
+    {%- endif -%}
+  {%- endfor -%}
+]

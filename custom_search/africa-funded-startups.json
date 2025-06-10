@@ -1,0 +1,34 @@
+---
+layout: null
+---
+[
+  {%- assign filter_values = "algeria, angola, benin, botswana, burkina faso, burundi, cabo verde, cameroon, central african republic, chad, comoros, democratic republic of the congo, republic of the congo, djibouti, egypt, equatorial guinea, eritrea, eswatini, ethiopia, gabon, gambia, ghana, guinea, guinea-bissau, ivory coast, kenya, lesotho, liberia, libya, madagascar, malawi, mali, mauritania, mauritius, morocco, mozambique, namibia, niger, nigeria, rwanda, são tomé and príncipe, senegal, seychelles, sierra leone, somalia, south africa, south sudan, sudan, tanzania, togo, tunisia, uganda, zambia, zimbabw" | split: ", " -%}
+  {%- assign first = true -%}
+  {%- for startup in site.startups -%}
+    {%- assign field_value = startup["hq"] | default: "" | downcase -%}
+    {%- assign match_found = false -%}
+    {%- for filter_value in filter_values -%}
+      {%- assign filter_value_clean = filter_value | strip -%}
+      {%- if field_value contains filter_value_clean -%}
+        {%- assign match_found = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if match_found -%}
+      {%- if first == false -%},{%- endif -%}
+      {
+        "id": "{{ startup.url | relative_url }}",
+        "title": "{{ startup.title | escape }}",
+        "search_title": "{{ startup.title | downcase }}",
+        "markets": "{{ startup.markets | escape }}",
+        "search_markets": "{{ startup.markets | downcase | escape }}",
+        "hq": "{{ startup.hq | escape }}",
+        "funding_round": "{{ startup.funding_round | escape }}",
+        "funding_amount": "{{ startup.funding_amount | escape }}",
+        "investors": "{{ startup.investors | escape }}",
+        "search_investors": "{{ startup.investors | downcase | escape }}"
+      }
+      {%- assign first = false -%}
+    {%- endif -%}
+  {%- endfor -%}
+]
