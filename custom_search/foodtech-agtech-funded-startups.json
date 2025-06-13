@@ -2,7 +2,7 @@
 layout: null
 ---
 [
-  {%- assign filter_values = "agtech, agriculture, farming, agri, food production" | split: ", " -%}
+  {%- assign filter_values = "agtech, food, foodtech, agriculture, aquaculture, alternative protein, agtech" | split: ", " -%}
   {%- assign first = true -%}
   {%- for startup in site.startups -%}
     {%- assign field_value = startup["markets"] | default: "" | downcase -%}

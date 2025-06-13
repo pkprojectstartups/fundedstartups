@@ -2,7 +2,7 @@
 layout: null
 ---
 [
-  {%- assign filter_values = "ai, artificial intelligence" | split: ", " -%}
+  {%- assign filter_values = "proptech, real estate, construction tech, 3d printing, construction, contech, property" | split: ", " -%}
   {%- assign first = true -%}
   {%- for startup in site.startups -%}
     {%- assign field_value = startup["markets"] | default: "" | downcase -%}
