@@ -1,6 +1,7 @@
 ---
 layout: null
 ---
+
 [
   {% for startup in site.startups %}
   {
@@ -13,7 +14,9 @@ layout: null
     "search_investors": "{{ startup.investors | downcase | escape }}",
     "hq": "{{ startup.hq | escape }}",
     "funding_round": "{{ startup.funding_round | escape }}",
-    "funding_amount": "{{ startup.funding_amount | escape }}"
+    "funding_amount": "{{ startup.funding_amount | escape }}",
+    "date_display": "{{ startup.date_display | escape }}",
+    "sortable_date": "{{ startup.date | date: '%Y-%m-%d' }}"
   }{% unless forloop.last %},{% endunless %}
   {% endfor %}
 ]

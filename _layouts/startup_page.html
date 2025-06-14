@@ -19,30 +19,32 @@ layout: default
             </button>
 			  <br>
   <a href="/buy/" target="_blank" class="btn btn-outline-primary btn-lg mt-3">
-    Buy Full Funded Startups Dataset
+    Buy Funded Startups lists
   </a>
           </div>
 
-          <div class="startup-info">
-            {% if page.funding_round %}<p><strong>Funding Round:</strong> {{ page.funding_round }}</p>{% endif %}
-            {% if page.funding_amount %}<p><strong>Funding Amount:</strong> {{ page.funding_amount }}</p>{% endif %}
-            {% if page.investors %}<p><strong>Investors:</strong> {{ page.investors }}</p>{% endif %}
-            {% if page.markets %}<p><strong>Markets:</strong> {{ page.markets }}</p>{% endif %}
-            {% if page.hq %}<p><strong>HQ:</strong> {{ page.hq }}</p>{% endif %}
-            {% if page.founded_year %}<p><strong>Founded:</strong> {{ page.founded_year }}</p>{% endif %}
-            {% if page.website %}<p><strong>Website:</strong> <a href="{{ page.website }}" target="_blank">{{ page.website }}</a></p>{% endif %}
-            {% if page.linkedin %}<p><strong>LinkedIn:</strong> <a href="{{ page.linkedin }}" target="_blank">{{ page.linkedin }}</a></p>{% endif %}
-            {% if page.twitter %}<p><strong>Twitter:</strong> <a href="{{ page.twitter }}" target="_blank">{{ page.twitter }}</a></p>{% endif %}
-            {% if page.instagram %}<p><strong>Instagram:</strong> <a href="{{ page.instagram }}" target="_blank">{{ page.instagram }}</a></p>{% endif %}
-            {% if page.facebook %}<p><strong>Facebook:</strong> <a href="{{ page.facebook }}" target="_blank">{{ page.facebook }}</a></p>{% endif %}
-            {% if page.crunchbase %}<p><strong>Crunchbase:</strong> <a href="{{ page.crunchbase }}" target="_blank">{{ page.crunchbase }}</a></p>{% endif %}
-            {% if page.pitchbook %}<p><strong>Pitchbook:</strong> <a href="{{ page.pitchbook }}" target="_blank">{{ page.pitchbook }}</a></p>{% endif %}
-          </div>
+		<div class="startup-info">
+  {% if page.funding_round %}<p><strong>Funding Round:</strong> {{ page.funding_round }}</p>{% endif %}
+  {% if page.funding_amount %}<p><strong>Funding Amount:</strong> {{ page.funding_amount }}</p>{% endif %}
+  {% if page.date_display %}<p><strong>Date:</strong> {{ page.date_display }}</p>{% endif %}
+  {% if page.investors %}<p><strong>Investors:</strong> {{ page.investors }}</p>{% endif %}
+  {% if page.markets %}<p><strong>Markets:</strong> {{ page.markets }}</p>{% endif %}
+  {% if page.hq %}<p><strong>HQ:</strong> {{ page.hq }}</p>{% endif %}
+  {% if page.founded_year %}<p><strong>Founded:</strong> {{ page.founded_year }}</p>{% endif %}
+  {% if page.website %}<p><strong>Website:</strong> <a href="{{ page.website }}" target="_blank">{{ page.website }}</a></p>{% endif %}
+  {% if page.linkedin %}<p><strong>LinkedIn:</strong> <a href="{{ page.linkedin }}" target="_blank">{{ page.linkedin }}</a></p>{% endif %}
+  {% if page.twitter %}<p><strong>Twitter:</strong> <a href="{{ page.twitter }}" target="_blank">{{ page.twitter }}</a></p>{% endif %}
+  {% if page.instagram %}<p><strong>Instagram:</strong> <a href="{{ page.instagram }}" target="_blank">{{ page.instagram }}</a></p>{% endif %}
+  {% if page.facebook %}<p><strong>Facebook:</strong> <a href="{{ page.facebook }}" target="_blank">{{ page.facebook }}</a></p>{% endif %}
+  {% if page.crunchbase %}<p><strong>Crunchbase:</strong> <a href="{{ page.crunchbase }}" target="_blank">{{ page.crunchbase }}</a></p>{% endif %}
+  {% if page.pitchbook %}<p><strong>Pitchbook:</strong> <a href="{{ page.pitchbook }}" target="_blank">{{ page.pitchbook }}</a></p>{% endif %}
+</div>
+
 		  
 		  
  <div class="text-center mt-4">
   <a href="/buy/" target="_blank" class="btn btn-primary btn-lg">
-    Download Full Funded Startups Dataset
+    Download Funded Startups lists
   </a>
 </div>
 

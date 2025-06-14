@@ -27,6 +27,7 @@ permalink: /custom_search.html
     Showing results for "<span id="search-query"></span>" in "<span id="list-name"></span>":
     <span id="result-count" class="text-muted"></span>
   </p>
+
   <div id="search-results">
     <p>Loading search results...</p>
   </div>
@@ -34,6 +35,7 @@ permalink: /custom_search.html
 
 <!-- Lunr.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+
 <script>
   const urlParams = new URLSearchParams(window.location.search);
   const query = urlParams.get('query');
@@ -71,11 +73,25 @@ permalink: /custom_search.html
       const results = idx.search(query);
       document.getElementById('result-count').textContent = `(${results.length} results found)`;
 
-      const resultsContainer = document.getElementById('search-results');
-      if (results.length) {
-        resultsContainer.innerHTML = results.map(result => {
-          const item = data.find(doc => doc.id === result.ref);
+      // Sort results by sortable_date (latest to oldest)
+      results.sort((a, b) => {
+        const itemA = data.find(doc => doc.id === a.ref);
+        const itemB = data.find(doc => doc.id === b.ref);
+        return (itemB.sortable_date || '').localeCompare(itemA.sortable_date || '');
+      });
 
+      const resultsContainer = document.getElementById('search-results');
+
+      if (results.length) {
+        let html = `
+          <div class="alert alert-info d-flex justify-content-between align-items-center mb-4">
+            <div><strong>Get funded startups lists</strong></div>
+            <a href="/buy/" target="_blank" class="btn btn-sm btn-primary">Download Lists</a>
+          </div>
+        `;
+
+        html += results.map(result => {
+          const item = data.find(doc => doc.id === result.ref);
           const trimmedMarkets = trimItems(item.markets, 4);
           const trimmedInvestors = trimItems(item.investors, 4);
 
@@ -85,17 +101,20 @@ permalink: /custom_search.html
                 <div class="card-body">
                   <h5 class="card-title text-primary">${item.title}</h5>
                   <p class="card-text">
-                    HQ: ${item.hq || '—'}<br>
-                    Markets: ${trimmedMarkets}<br>
-                    Investors: ${trimmedInvestors}<br>
-                    Funding Round: ${item.funding_round || '—'}<br>
-                    Funding Amount: ${item.funding_amount || '—'}
+                    ${item.date_display ? `<strong>Date:</strong> ${item.date_display}<br>` : ''}
+                    ${item.hq ? `<strong>HQ:</strong> ${item.hq}<br>` : ''}
+                    ${trimmedMarkets ? `<strong>Markets:</strong> ${trimmedMarkets}<br>` : ''}
+                    ${trimmedInvestors ? `<strong>Investors:</strong> ${trimmedInvestors}<br>` : ''}
+                    ${item.funding_round ? `<strong>Funding Round:</strong> ${item.funding_round}<br>` : ''}
+                    ${item.funding_amount ? `<strong>Funding Amount:</strong> ${item.funding_amount}` : ''}
                   </p>
                 </div>
               </div>
             </a>
           `;
         }).join('');
+
+        resultsContainer.innerHTML = html;
       } else {
         resultsContainer.innerHTML = '<p>No results found.</p>';
       }

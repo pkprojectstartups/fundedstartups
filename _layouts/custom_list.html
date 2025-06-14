@@ -8,8 +8,9 @@ layout: default
 
   {% assign filter_key = page.filter.key %}
   {% assign filter_values = page.filter.value | downcase | split: ", " %}
-  {% assign filtered_startups = "" %}
 
+  <!-- Filter startups based on key/value -->
+  {% assign filtered_startups = site.startups | where_exp: "startup", "false" %}
   {% for startup in site.startups %}
     {% assign startup_values = startup[filter_key] | downcase | split: ", " %}
     {% assign match_found = false %}
@@ -21,11 +22,14 @@ layout: default
       {% endif %}
     {% endfor %}
     {% if match_found %}
-      {% assign filtered_startups = filtered_startups | append: startup.url | append: "," %}
+      {% assign filtered_startups = filtered_startups | push: startup %}
     {% endif %}
   {% endfor %}
 
-  {% assign filtered_startups = filtered_startups | split: "," | uniq %}
+  <!-- Sort by date descending -->
+  {% assign filtered_startups = filtered_startups | sort: "date" | reverse %}
+
+  <!-- Pagination Setup -->
   {% assign current_page = page.current_page | default: 1 %}
   {% assign per_page = page.per_page | default: 10 %}
   {% assign total_pages = filtered_startups.size | divided_by: per_page | ceil %}
@@ -47,58 +51,57 @@ layout: default
 
   <!-- Top Buy CTA -->
   <div class="alert alert-success d-flex justify-content-between align-items-center p-3 mb-4">
-    <div>
-      Want all funded startups in one file?
-    </div>
-    <a href="/buy/" class="btn btn-success">Buy Full Funded Startups Database →</a>
+    <div>Downloads available.</div>
+    <a href="/buy/" class="btn btn-success">Buy Funded Startups lists →</a>
   </div>
 
+  <!-- Startup Cards -->
   <div class="row">
-    {% for startup_url in paginated_startups %}
-      {% assign startup = site.startups | where: "url", startup_url | first %}
-      {% if startup %}
-        {% assign startup_id = startup.permalink | remove: "/" | replace: ".", "_" %}
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="card shadow-sm h-100 startup-card position-relative">
-            <a href="{{ startup.url | relative_url }}" class="text-decoration-none card-link" aria-label="{{ startup.title }}">
-              <div class="card-body">
-                <h5 class="card-title">{{ startup.title }}</h5>
-                <p class="card-text text-muted">
-                  {% if startup.funding_round %}
-                    <strong>Funding Round:</strong> {{ startup.funding_round }}<br>
-                  {% endif %}
-                  {% if startup.funding_amount %}
-                    <strong>Amount:</strong> {{ startup.funding_amount }}<br>
-                  {% endif %}
-                  {% if startup.investors %}
-                    <strong>Investors:</strong>
-                    {% assign investor_list = startup.investors | split: "," %}
-                    {{ investor_list | slice: 0, 3 | join: ", " }}{% if investor_list.size > 3 %}...{% endif %}<br>
-                  {% endif %}
-                  {% if startup.markets %}
-                    <strong>Markets:</strong>
-                    {% assign market_list = startup.markets | split: "," %}
-                    {{ market_list | slice: 0, 3 | join: ", " }}{% if market_list.size > 3 %}...{% endif %}<br>
-                  {% endif %}
-                  {% if startup.hq %}
-                    <strong>HQ:</strong> {{ startup.hq }}
-                  {% endif %}
-                </p>
-              </div>
-            </a>
+    {% for startup in paginated_startups %}
+      {% assign startup_id = startup.permalink | remove: "/" | replace: ".", "_" %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card shadow-sm h-100 startup-card position-relative">
+          <a href="{{ startup.url | relative_url }}" class="text-decoration-none card-link" aria-label="{{ startup.title }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ startup.title }}</h5>
+              <p class="card-text text-muted">
+                {% if startup.funding_round %}
+                  <strong>Funding Round:</strong> {{ startup.funding_round }}<br>
+                {% endif %}
+                {% if startup.funding_amount %}
+                  <strong>Amount:</strong> {{ startup.funding_amount }}<br>
+                {% endif %}
+                {% if startup.investors %}
+                  <strong>Investors:</strong>
+                  {% assign investor_list = startup.investors | split: "," %}
+                  {{ investor_list | slice: 0, 3 | join: ", " }}{% if investor_list.size > 3 %}...{% endif %}<br>
+                {% endif %}
+                {% if startup.markets %}
+                  <strong>Markets:</strong>
+                  {% assign market_list = startup.markets | split: "," %}
+                  {{ market_list | slice: 0, 3 | join: ", " }}{% if market_list.size > 3 %}...{% endif %}<br>
+                {% endif %}
+                {% if startup.hq %}
+                  <strong>HQ:</strong> {{ startup.hq }}<br>
+                {% endif %}
+                {% if startup.date_display %}
+                  <strong>Date:</strong> {{ startup.date_display }}
+                {% endif %}
+              </p>
+            </div>
+          </a>
 
-            <!-- Upvote Button -->
-            <button
-              class="btn btn-sm btn-outline-primary upvote-button position-absolute top-0 end-0 m-2 py-0 px-2"
-              data-startup-id="{{ startup_id }}"
-              title="Upvote this startup"
-              style="font-size: 0.75rem;"
-            >
-              ▲ <span class="upvote-count" data-startup-id="{{ startup_id }}">0</span>
-            </button>
-          </div>
+          <!-- Upvote Button -->
+          <button
+            class="btn btn-sm btn-outline-primary upvote-button position-absolute top-0 end-0 m-2 py-0 px-2"
+            data-startup-id="{{ startup_id }}"
+            title="Upvote this startup"
+            style="font-size: 0.75rem;"
+          >
+            ▲ <span class="upvote-count" data-startup-id="{{ startup_id }}">0</span>
+          </button>
         </div>
-      {% endif %}
+      </div>
     {% endfor %}
   </div>
 
@@ -106,10 +109,10 @@ layout: default
     <p class="text-center text-muted">No startups found matching the filter criteria.</p>
   {% endunless %}
 
+  <!-- Pagination Controls -->
   {% assign base_url = site.baseurl | append: page.url | split: "/page" | first | remove: "index.html" | replace: "//", "/" | strip %}
   {% assign base_url = base_url | append: "/" | replace: "//", "/" %}
 
-  <!-- Pagination Controls -->
   <nav class="d-flex justify-content-center mt-4">
     <ul class="pagination">
       {% if current_page > 1 %}
@@ -121,28 +124,41 @@ layout: default
         <li class="page-item disabled"><span class="page-link">&laquo; Previous</span></li>
       {% endif %}
 
-      {% assign range_start = current_page | minus: 2 | at_least: 1 %}
-      {% assign range_end = current_page | plus: 2 | at_most: total_pages %}
-      {% for i in (range_start..range_end) %}
-        <li class="page-item {% if i == current_page %}active{% endif %}">
-          <a class="page-link" href="{{ base_url }}page{{ i }}">{{ i }}</a>
+      {% if current_page > 4 %}
+        <li class="page-item"><a class="page-link" href="{{ base_url }}page1">1</a></li>
+        <li class="page-item disabled"><span class="page-link">...</span></li>
+      {% endif %}
+
+      {% assign range_start = current_page | minus: 2 %}
+      {% assign range_end = current_page | plus: 2 %}
+      {% if range_start < 1 %}{% assign range_start = 1 %}{% endif %}
+      {% if range_end > total_pages %}{% assign range_end = total_pages %}{% endif %}
+
+      {% for page_num in (range_start..range_end) %}
+        <li class="page-item {% if page_num == current_page %}active{% endif %}">
+          <a class="page-link" href="{{ base_url }}page{{ page_num }}">{{ page_num }}</a>
         </li>
       {% endfor %}
 
+      {% assign trailing_threshold = total_pages | minus: 3 %}
+      {% if current_page < trailing_threshold %}
+        <li class="page-item disabled"><span class="page-link">...</span></li>
+        <li class="page-item"><a class="page-link" href="{{ base_url }}page{{ total_pages }}">{{ total_pages }}</a></li>
+      {% endif %}
+
       {% if current_page < total_pages %}
-        <li class="page-item">
-          <a class="page-link" href="{{ base_url }}page{{ current_page | plus: 1 }}">Next &raquo;</a>
-        </li>
+        {% assign next_page = current_page | plus: 1 %}
+        <li class="page-item"><a class="page-link" href="{{ base_url }}page{{ next_page }}">Next &raquo;</a></li>
       {% else %}
         <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
       {% endif %}
     </ul>
   </nav>
 
-  <!-- Bottom Buy CTA -->
+  <!-- Bottom CTA -->
   <div class="text-center mt-5">
     <p class="fw-semibold">Looking to save time?</p>
-    <a href="/buy/" class="btn btn-outline-dark btn-sm">Download All Funded Startups in CSV – $45</a>
+    <a href="/buy/" class="btn btn-outline-dark btn-sm">Download Funded Startups lists</a>
   </div>
 </div>
 
