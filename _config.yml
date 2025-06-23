@@ -2,7 +2,7 @@
 title: "projectstartups.com"
 description: "projectstartups.com supports startups by offering an open-access VC database, a comprehensive directory of funded startups, and other valuable resources."
 baseurl: ""  # <-- IMPORTANT: Your GitHub Pages repo name
-url: "https://pkprojectstartups.github.io"  # <-- Your GitHub Pages URL
+url: "https://startup.projectstartups.com"  # <-- Your GitHub Pages URL
 
 # Theme Settings
 theme: minima
