@@ -19,7 +19,7 @@ layout: default
             </button>
 			  <br>
   <a href="/buy/" target="_blank" class="btn btn-outline-primary btn-lg mt-3">
-    Buy Funded Startups lists
+    Buy Download
   </a>
           </div>
 
@@ -44,10 +44,135 @@ layout: default
 		  
  <div class="text-center mt-4">
   <a href="/buy/" target="_blank" class="btn btn-primary btn-lg">
-    Download Funded Startups lists
+    Buy Download
   </a>
 </div>
+	
+		
+	
+	
+{% assign all_startups = site.startups %}
+{% assign scored_matches = "" | split: "" %}
 
+{% for startup in all_startups %}
+  {% if startup.id != page.id %}
+    {% assign score = 0 %}
+
+    <!-- Market match (weight: 2) -->
+    {% if page.markets and startup.markets %}
+      {% assign current_markets = page.markets | split: ", " %}
+      {% assign other_markets = startup.markets | split: ", " %}
+      {% for market in current_markets %}
+        {% if other_markets contains market %}
+          {% assign score = score | plus: 2 %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    <!-- HQ match (City > Country, weight: 1) -->
+    {% if page.hq and startup.hq %}
+      {% assign current_hq = page.hq | split: ", " %}
+      {% assign other_hq = startup.hq | split: ", " %}
+      {% if current_hq[0] == other_hq[0] %}
+        {% assign score = score | plus: 1 %}
+      {% elsif current_hq[2] == other_hq[2] and current_hq[2] %}
+        {% assign score = score | plus: 1 %}
+      {% endif %}
+    {% endif %}
+
+    <!-- Funding Round match (weight: 1) -->
+    {% if page.funding_round and startup.funding_round and startup.funding_round == page.funding_round %}
+      {% assign score = score | plus: 1 %}
+    {% endif %}
+
+    <!-- Investor match (weight: 1 per shared investor) -->
+    {% if page.investors and startup.investors %}
+      {% assign page_investors = page.investors | split: ", " %}
+      {% assign other_investors = startup.investors | split: ", " %}
+      {% for investor in page_investors %}
+        {% if other_investors contains investor %}
+          {% assign score = score | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {% if score > 0 %}
+      {% assign entry = score | append: "," | append: startup.date | append: "," | append: startup.id %}
+      {% assign scored_matches = scored_matches | push: entry %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% assign sorted_matches = scored_matches | sort | reverse %}
+{% assign top_matches = sorted_matches | slice: 0, 6 %}
+
+{% if top_matches.size > 0 %}
+  <hr class="my-4" />
+  <h2 class="text-left mb-4">Similar Startups</h2>
+  <div class="row">
+    {% for match in top_matches %}
+      {% assign parts = match | split: "," %}
+      {% assign match_id = parts[2] %}
+      {% assign matched = site.startups | where: "id", match_id | first %}
+      {% if matched %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <a href="{{ matched.permalink }}" class="text-decoration-none text-dark h-100 d-block">
+            <div class="card h-100 shadow-sm border-0 rounded-4">
+              <div class="card-body">
+                <h5 class="card-title" style="font-size: 1.1rem;">{{ matched.title }}</h5>
+                <div class="text-muted small">
+                  {% if matched.date_display %}
+                    <strong>Date:</strong> {{ matched.date_display }}<br>
+                  {% endif %}
+                  {% if matched.markets %}
+                    <strong>Markets:</strong> 
+                    {% assign market_list = matched.markets | split: ", " %}
+                    {{ market_list | slice: 0, 2 | join: ", " }}{% if market_list.size > 2 %},...{% endif %}<br>
+                  {% endif %}
+                  {% if matched.hq %}
+                    <strong>HQ:</strong> 
+                    {% assign hq_list = matched.hq | split: ", " %}
+                    {{ hq_list | slice: 0, 2 | join: ", " }}{% if hq_list.size > 2 %},...{% endif %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+	
+			
+			
+			
           <hr class="my-4" />
 
           <div id="comment-section">

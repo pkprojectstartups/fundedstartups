@@ -12,7 +12,8 @@ layout: default
   <!-- Filter startups based on key/value -->
   {% assign filtered_startups = site.startups | where_exp: "startup", "false" %}
   {% for startup in site.startups %}
-    {% assign startup_values = startup[filter_key] | downcase | split: ", " %}
+	{% assign startup_values = startup[filter_key] | default: "" | downcase | split: ", " %}
+
     {% assign match_found = false %}
     {% for value in startup_values %}
       {% assign trimmed_value = value | strip %}
@@ -52,7 +53,7 @@ layout: default
   <!-- Top Buy CTA -->
   <div class="alert alert-success d-flex justify-content-between align-items-center p-3 mb-4">
     <div>Downloads available.</div>
-    <a href="/buy/" class="btn btn-success">Buy Funded Startups lists →</a>
+    <a href="/buy/" class="btn btn-success">Buy Download</a>
   </div>
 
   <!-- Startup Cards -->
@@ -158,7 +159,7 @@ layout: default
   <!-- Bottom CTA -->
   <div class="text-center mt-5">
     <p class="fw-semibold">Looking to save time?</p>
-    <a href="/buy/" class="btn btn-outline-dark btn-sm">Download Funded Startups lists</a>
+    <a href="/buy/" class="btn btn-outline-dark btn-sm">Buy Download</a>
   </div>
 </div>
 
