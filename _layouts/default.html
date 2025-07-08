@@ -71,7 +71,8 @@
   <!-- Header -->
 <header class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
   <div class="container">
-    <a href="https://projectstartups.com/" class="navbar-brand">projectstartups.com</a>
+    <a href="{{ site.url }}" class="navbar-brand">{{ site.url | replace: 'https://', '' }}</a>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
       aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
