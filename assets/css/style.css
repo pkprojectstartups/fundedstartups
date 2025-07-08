@@ -116,3 +116,9 @@ footer a:hover {
     font-size: 0.9rem;
   }
 }
+/*Add this CSS for hover effects (place in <head> or external stylesheet)*/
+
+.hover-effect:hover {
+    background-color: rgba(13, 110, 253, 0.1); /* Light blue bg on hover */
+    text-decoration: underline !important;
+  }

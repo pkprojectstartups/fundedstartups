@@ -27,12 +27,6 @@ per_page: 30
     Showing <strong>{{ total_items }}</strong> funded startups.
   </p>
 
-  <div class="alert alert-success d-flex justify-content-between align-items-center p-3 mb-4">
-	<div>
-      Downloads available.
-    </div>
-    <a href="/buy/" class="btn btn-success">Buy Download</a>
-  </div>
 
   <div class="row">
     {% for startup in paginated_items %}
@@ -137,11 +131,6 @@ per_page: 30
   </ul>
 </nav>
 
-
-  <div class="text-center mt-5">
-    <p class="fw-semibold">Looking to save time?</p>
-    <a href="/buy/" class="btn btn-outline-dark btn-sm">Buy Download</a>
-  </div>
 </div>
 
 <!-- Upvote Script -->

@@ -50,12 +50,6 @@ layout: default
     Showing <strong>{{ filtered_startups.size }}</strong> startups matching the filter criteria.
   </p>
 
-  <!-- Top Buy CTA -->
-  <div class="alert alert-success d-flex justify-content-between align-items-center p-3 mb-4">
-    <div>Downloads available.</div>
-    <a href="/buy/" class="btn btn-success">Buy Download</a>
-  </div>
-
   <!-- Startup Cards -->
   <div class="row">
     {% for startup in paginated_startups %}
@@ -156,11 +150,6 @@ layout: default
     </ul>
   </nav>
 
-  <!-- Bottom CTA -->
-  <div class="text-center mt-5">
-    <p class="fw-semibold">Looking to save time?</p>
-    <a href="/buy/" class="btn btn-outline-dark btn-sm">Buy Download</a>
-  </div>
 </div>
 
 <!-- Upvote Script -->

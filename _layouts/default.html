@@ -69,9 +69,9 @@
 
 <body data-startup-key="{{ page.permalink | remove_first:'/' | remove:'/' | replace:'.','_' }}">
   <!-- Header -->
-<header class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
+	<header class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
   <div class="container">
-    <a href="{{ site.url }}" class="navbar-brand">{{ site.url | replace: 'https://', '' }}</a>
+    <a href="{{ site.url }}" class="navbar-brand">projectstartups.com</a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
       aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,18 +89,18 @@
         <!-- Databases Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="databasesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Databases
+            Search VC/Startups
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="databasesDropdown">
-            <li><a class="dropdown-item" href="https://vc.projectstartups.com/">VC Database</a></li>
-            <li><a class="dropdown-item" href="https://startup.projectstartups.com/">Funded Database</a></li>
+            <li><a class="dropdown-item" href="https://vc.projectstartups.com/">Search VC Firms</a></li>
+            <li><a class="dropdown-item" href="https://startup.projectstartups.com/">Search Funded Startups</a></li>
           </ul>
         </li>
 
         <!-- Lists Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="listsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Lists
+            VC/Startup Lists
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="listsDropdown">
             <li><a class="dropdown-item" href="https://vc.projectstartups.com/vc_list/">VC Lists</a></li>
@@ -111,11 +111,11 @@
         <!-- Buy Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="buyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Buy
+            Download
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="buyDropdown">
-            <li><a class="dropdown-item" href="https://vc.projectstartups.com/buy/">Buy VC Lists</a></li>
-            <li><a class="dropdown-item" href="https://startup.projectstartups.com/buy/">Buy Startup Lists</a></li>
+            <li><a class="dropdown-item" href="https://vc.projectstartups.com/buy/">Download VC Lists</a></li>
+            <li><a class="dropdown-item" href="https://startup.projectstartups.com/buy/">Download Startup Lists</a></li>
           </ul>
         </li>
 
@@ -128,48 +128,117 @@
 
   <!-- Main Content -->
 <main class="container py-5 mt-5">
-  {{ content }}
 
-  {% unless page.url contains '404' %}
-  <!-- Share Buttons -->
-  <div class="mt-5 text-center">
-    <p class="fw-semibold">Share this page:</p>
-    <div class="d-flex justify-content-center gap-3 flex-wrap">
-      {% assign share_title = page.meta_title | default: page.title %}
-      {% assign share_url = page.canonical_url | default: page.url | absolute_url %}
-
-      <!-- Twitter -->
-      <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text={{ share_title | uri_escape }}&url={{ share_url | uri_escape }}">
-        <i class="bi bi-twitter"></i> Twitter
-      </a>
-
-      <!-- LinkedIn -->
-      <a class="btn btn-outline-success btn-sm" target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url={{ share_url | uri_escape }}">
-        <i class="bi bi-linkedin"></i> LinkedIn
-      </a>
-
-      <!-- Facebook -->
-      <a class="btn btn-outline-secondary btn-sm" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ share_url | uri_escape }}">
-        <i class="bi bi-facebook"></i> Facebook
-      </a>
-
-      <!-- WhatsApp -->
-      <a class="btn btn-outline-success btn-sm" target="_blank" rel="noopener" href="https://api.whatsapp.com/send?text={{ share_title | uri_escape }}%0A{{ share_url | uri_escape }}">
-        <i class="bi bi-whatsapp"></i> WhatsApp
-      </a>
-
-      <!-- Email -->
-      <a class="btn btn-outline-dark btn-sm" href="mailto:?subject={{ share_title | uri_escape }}&body={{ share_title | uri_escape }}%0A{{ share_url | uri_escape }}">
-        <i class="bi bi-envelope"></i> Email
-      </a>
-
-      <!-- Copy Link -->
-      <button class="btn btn-outline-dark btn-sm" onclick="navigator.clipboard.writeText('{{ share_url }}'); this.innerText='Copied!'">
-        <i class="bi bi-clipboard"></i> Copy Link
-      </button>
-    </div>
+  <div class="text-center mt-4 mb-3 small" style="font-size: 0.9rem;">
+  <span class="text-muted d-block mb-2">Quick Access:</span>
+  <div class="d-flex flex-wrap justify-content-center gap-2">
+    <!-- Search -->
+    <a href="https://vc.projectstartups.com" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
+      <i class="bi bi-search me-1"></i> Search VCs
+    </a>
+    <a href="https://startup.projectstartups.com" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
+      <i class="bi bi-search me-1"></i> Search Startups
+    </a>
+    
+    <!-- Browse Lists -->
+    <a href="https://vc.projectstartups.com/vc_list/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
+      <i class="bi bi-folder me-1"></i> Browse VCs
+    </a>
+    <a href="https://startup.projectstartups.com/startup_list/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
+      <i class="bi bi-folder me-1"></i> Browse Startups
+    </a>
+    
+    <!-- Download/Purchase -->
+    <a href="https://vc.projectstartups.com/buy/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
+      <i class="bi bi-download me-1"></i> Get VC Data
+    </a>
+    <a href="https://startup.projectstartups.com/buy/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
+      <i class="bi bi-download me-1"></i> Get Startup Data
+    </a>
   </div>
-  {% endunless %}
+</div>
+
+
+
+
+  {{ content }}
+  
+  
+  
+  <div class="text-center mt-4 mb-3 small" style="font-size: 0.9rem;">
+  <span class="text-muted d-block mb-2">Quick Access:</span>
+  <div class="d-flex flex-wrap justify-content-center gap-2">
+    <!-- Search -->
+    <a href="https://vc.projectstartups.com" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
+      <i class="bi bi-search me-1"></i> Search VCs
+    </a>
+    <a href="https://startup.projectstartups.com" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
+      <i class="bi bi-search me-1"></i> Search Startups
+    </a>
+    
+    <!-- Browse Lists -->
+    <a href="https://vc.projectstartups.com/vc_list/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
+      <i class="bi bi-folder me-1"></i> Browse VCs
+    </a>
+    <a href="https://startup.projectstartups.com/startup_list/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
+      <i class="bi bi-folder me-1"></i> Browse Startups
+    </a>
+    
+    <!-- Download/Purchase -->
+    <a href="https://vc.projectstartups.com/buy/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
+      <i class="bi bi-download me-1"></i> Get VC Data
+    </a>
+    <a href="https://startup.projectstartups.com/buy/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
+      <i class="bi bi-download me-1"></i> Get Startup Data
+    </a>
+  </div>
+</div>
+  
+  
+  
+  
+  
+  
+  
+  
+  {% unless page.url contains 'search' or page.url contains '404' %}
+<!-- Share Section -->
+<div class="mt-4 text-center">
+  <p class="fw-semibold mb-2">Share this:</p>
+  <div class="d-flex justify-content-center gap-2 flex-wrap small">
+    {% assign share_title = page.meta_title | default: page.title %}
+    {% assign share_url = page.canonical_url | default: page.url | absolute_url %}
+
+    <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text={{ share_title | uri_escape }}&url={{ share_url | uri_escape }}">
+      <i class="bi bi-twitter"></i>
+    </a>
+
+    <a class="btn btn-outline-success btn-sm" target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url={{ share_url | uri_escape }}">
+      <i class="bi bi-linkedin"></i>
+    </a>
+
+    <a class="btn btn-outline-secondary btn-sm" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ share_url | uri_escape }}">
+      <i class="bi bi-facebook"></i>
+    </a>
+
+    <a class="btn btn-outline-success btn-sm" target="_blank" rel="noopener" href="https://api.whatsapp.com/send?text={{ share_title | uri_escape }}%0A{{ share_url | uri_escape }}">
+      <i class="bi bi-whatsapp"></i>
+    </a>
+
+    <a class="btn btn-outline-dark btn-sm" href="mailto:?subject={{ share_title | uri_escape }}&body={{ share_title | uri_escape }}%0A{{ share_url | uri_escape }}">
+      <i class="bi bi-envelope"></i>
+    </a>
+
+    <button class="btn btn-outline-dark btn-sm" onclick="navigator.clipboard.writeText('{{ share_url }}'); this.innerText='Copied!'">
+      <i class="bi bi-clipboard"></i>
+    </button>
+  </div>
+</div>
+{% endunless %}
+  
+  
+  
+  
 </main>
 
 
@@ -180,16 +249,16 @@
 
       <!-- Databases -->
       <div class="col-12 col-md-4 mb-4">
-        <h6 class="text-uppercase fw-bold mb-3">Databases</h6>
+        <h6 class="text-uppercase fw-bold mb-3">Search VC/Startups</h6>
         <ul class="list-unstyled">
-          <li><a class="text-white text-decoration-none" href="https://vc.projectstartups.com/">VC Database</a></li>
-          <li><a class="text-white text-decoration-none" href="https://startup.projectstartups.com/">Funded Startups</a></li>
+          <li><a class="text-white text-decoration-none" href="https://vc.projectstartups.com/">Search VC Firms</a></li>
+          <li><a class="text-white text-decoration-none" href="https://startup.projectstartups.com/">Search Funded Startups</a></li>
         </ul>
       </div>
 
       <!-- Lists -->
       <div class="col-12 col-md-4 mb-4">
-        <h6 class="text-uppercase fw-bold mb-3">Lists</h6>
+        <h6 class="text-uppercase fw-bold mb-3">VC/Startup Lists</h6>
         <ul class="list-unstyled">
           <li><a class="text-white text-decoration-none" href="https://vc.projectstartups.com/vc_list/">VC Lists</a></li>
           <li><a class="text-white text-decoration-none" href="https://startup.projectstartups.com/startup_list/">Startup Lists</a></li>
@@ -198,10 +267,10 @@
 
       <!-- Buy -->
       <div class="col-12 col-md-4 mb-4">
-        <h6 class="text-uppercase fw-bold mb-3">Buy</h6>
+        <h6 class="text-uppercase fw-bold mb-3">Download</h6>
         <ul class="list-unstyled">
-          <li><a class="text-white text-decoration-none" href="https://vc.projectstartups.com/buy/">Buy VC Lists</a></li>
-          <li><a class="text-white text-decoration-none" href="https://startup.projectstartups.com/buy/">Buy Startup Lists</a></li>
+          <li><a class="text-white text-decoration-none" href="https://vc.projectstartups.com/buy/">Download VC Lists</a></li>
+          <li><a class="text-white text-decoration-none" href="https://startup.projectstartups.com/buy/">Download Startup Lists</a></li>
         </ul>
       </div>
 
