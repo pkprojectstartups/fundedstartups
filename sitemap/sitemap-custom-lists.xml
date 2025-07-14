@@ -1,0 +1,40 @@
+---
+layout: null
+permalink: /sitemap/sitemap-custom-lists.xml
+---
+
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Total startup custom lists: {{ site.custom_lists | size }} -->
+
+  {% for list in site.custom_lists %}
+    {% if list.url contains "/index.html" %}
+      {% assign base_path = list.url | replace: 'index.html', '' %}
+
+      <!-- Main custom list page -->
+      <url>
+        <loc>{{ site.url }}{{ base_path }}</loc>
+        <lastmod>
+          {% if list.last_modified_at %}
+            {{ list.last_modified_at | date_to_xmlschema }}
+          {% elsif list.date %}
+            {{ list.date | date_to_xmlschema }}
+          {% else %}
+            {{ site.time | date_to_xmlschema }}
+          {% endif %}
+        </lastmod>
+      </url>
+
+      <!-- Paginated pages (assumes pages 2–50 might exist, adjust if needed) -->
+      {% for i in (2..5) %}
+        <url>
+          <loc>{{ site.url }}{{ base_path }}page{{ i }}/</loc>
+          <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
+        </url>
+      {% endfor %}
+
+    {% endif %}
+  {% endfor %}
+
+</urlset>

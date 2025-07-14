@@ -1,0 +1,28 @@
+---
+layout: null
+permalink: /sitemap/sitemap-pages.xml
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>{{ site.url }}{{ site.baseurl }}/</loc>
+    <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
+  </url>
+
+  {% assign pagination_pages = site.pages | where: "layout", "all" | where_exp: "item", "item.url contains '/page'" | sort: "current_page" %}
+  
+  {% for page in pagination_pages %}
+    <url>
+      <loc>{{ site.url }}{{ page.url }}</loc>
+      <lastmod>
+        {% if page.last_modified %}
+          {{ page.last_modified | date_to_xmlschema }}
+        {% else %}
+          {{ site.time | date_to_xmlschema }}
+        {% endif %}
+      </lastmod>
+    </url>
+  {% endfor %}
+
+</urlset>

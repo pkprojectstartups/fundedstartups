@@ -1,0 +1,26 @@
+---
+layout: none
+permalink: /sitemap/sitemap.xml
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap><loc>{{ site.url }}/sitemap/sitemap1.xml</loc></sitemap>
+    <sitemap><loc>{{ site.url }}/sitemap/sitemap2.xml</loc></sitemap>
+    <sitemap><loc>{{ site.url }}/sitemap/sitemap3.xml</loc></sitemap>
+	<sitemap><loc>{{ site.url }}/sitemap/sitemap4.xml</loc></sitemap>
+	<sitemap><loc>{{ site.url }}/sitemap/sitemap5.xml</loc></sitemap>
+	<sitemap><loc>{{ site.url }}/sitemap/sitemap6.xml</loc></sitemap>
+	<sitemap><loc>{{ site.url }}/sitemap/sitemap7.xml</loc></sitemap>
+	<sitemap><loc>{{ site.url }}/sitemap/sitemap8.xml</loc></sitemap>
+	<sitemap><loc>{{ site.url }}/sitemap/sitemap9.xml</loc></sitemap>
+	<sitemap><loc>{{ site.url }}/sitemap/sitemap10.xml</loc></sitemap>
+	<sitemap><loc>{{ site.url }}/sitemap/sitemap11.xml</loc></sitemap>
+
+	
+	
+		
+  <!-- Add more if needed -->
+  <sitemap><loc>{{ site.url }}/sitemap/sitemap-custom-lists.xml</loc></sitemap>
+  <sitemap><loc>{{ site.url }}/sitemap/sitemap-pages.xml</loc></sitemap>
+
+</sitemapindex>

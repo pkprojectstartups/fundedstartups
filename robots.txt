@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://startup.projectstartups.com/sitemap/sitemap.xml

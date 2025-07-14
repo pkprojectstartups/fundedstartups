@@ -1,0 +1,21 @@
+---
+layout: none
+permalink: /sitemap/sitemap8.xml
+---
+
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  {% assign all_startups = site.startups %}
+  {% assign paginated_startups = all_startups | slice: 3500, 4000 %}
+
+  {% for startup in paginated_startups %}
+    {% if startup.website and startup.title %}
+      <url>
+        <loc>{{ startup.canonical_url | default: startup.url | absolute_url }}</loc>
+        <lastmod>{{ startup.date | date_to_xmlschema }}</lastmod>
+      </url>
+    {% endif %}
+  {% endfor %}
+
+</urlset>
