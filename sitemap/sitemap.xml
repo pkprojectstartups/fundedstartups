@@ -15,8 +15,10 @@ permalink: /sitemap/sitemap.xml
 	<sitemap><loc>{{ site.url }}/sitemap/sitemap9.xml</loc></sitemap>
 	<sitemap><loc>{{ site.url }}/sitemap/sitemap10.xml</loc></sitemap>
 	<sitemap><loc>{{ site.url }}/sitemap/sitemap11.xml</loc></sitemap>
-
+        <sitemap><loc>{{ site.url }}/sitemap/sitemap12.xml</loc></sitemap>
+	<sitemap><loc>{{ site.url }}/sitemap/sitemap13.xml</loc></sitemap>
 	
+
 	
 		
   <!-- Add more if needed -->
