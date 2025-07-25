@@ -32,7 +32,7 @@ permalink: pretty  # Clean URLs
 include:
   - search.json
 #sitemap:
-plugins:
-- jekyll-sitemap
+#plugins:
+#- jekyll-sitemap
 
 
