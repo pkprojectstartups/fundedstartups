@@ -72,7 +72,6 @@
 	<header class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
   <div class="container">
     <a href="{{ site.url }}" class="navbar-brand">projectstartups.com</a>
-
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
       aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -89,18 +88,18 @@
         <!-- Databases Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="databasesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Search VC/Startups
+            Search
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="databasesDropdown">
-            <li><a class="dropdown-item" href="https://vc.projectstartups.com/">Search VC Firms</a></li>
-            <li><a class="dropdown-item" href="https://startup.projectstartups.com/">Search Funded Startups</a></li>
+            <li><a class="dropdown-item" href="https://vc.projectstartups.com/">VC Firms</a></li>
+            <li><a class="dropdown-item" href="https://startup.projectstartups.com/">Funded Startups</a></li>
           </ul>
         </li>
 
         <!-- Lists Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="listsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            VC/Startup Lists
+            Lists
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="listsDropdown">
             <li><a class="dropdown-item" href="https://vc.projectstartups.com/vc_list/">VC Lists</a></li>
@@ -108,7 +107,7 @@
           </ul>
         </li>
 
-       <!-- Buy Dropdown -->
+        <!-- Buy Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="buyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Buy Now
@@ -129,74 +128,24 @@
   <!-- Main Content -->
 <main class="container py-5 mt-5">
 
-  <div class="text-center mt-4 mb-3 small" style="font-size: 0.9rem;">
-  <span class="text-muted d-block mb-2">Quick Access:</span>
-  <div class="d-flex flex-wrap justify-content-center gap-2">
-    <!-- Search -->
-    <a href="https://vc.projectstartups.com" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
-      <i class="bi bi-search me-1"></i> Search VCs
-    </a>
-    <a href="https://startup.projectstartups.com" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
-      <i class="bi bi-search me-1"></i> Search Startups
-    </a>
-    
-    <!-- Browse Lists -->
-    <a href="https://vc.projectstartups.com/vc_list/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
-      <i class="bi bi-folder me-1"></i> Browse VCs
-    </a>
-    <a href="https://startup.projectstartups.com/startup_list/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
-      <i class="bi bi-folder me-1"></i> Browse Startups
-    </a>
-    
-    <!-- Download/Purchase -->
-    <a href="https://vc.projectstartups.com/buy/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
-      <i class="bi bi-download me-1"></i> Get VC Data
-    </a>
-    <a href="https://startup.projectstartups.com/buy/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
-      <i class="bi bi-download me-1"></i> Get Startup Data
-    </a>
-  </div>
-</div>
-
+  
 
 
 
   {{ content }}
   
   
-  
-  <div class="text-center mt-4 mb-3 small" style="font-size: 0.9rem;">
-  <span class="text-muted d-block mb-2">Quick Access:</span>
-  <div class="d-flex flex-wrap justify-content-center gap-2">
-    <!-- Search -->
-    <a href="https://vc.projectstartups.com" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
-      <i class="bi bi-search me-1"></i> Search VCs
-    </a>
-    <a href="https://startup.projectstartups.com" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
-      <i class="bi bi-search me-1"></i> Search Startups
-    </a>
-    
-    <!-- Browse Lists -->
-    <a href="https://vc.projectstartups.com/vc_list/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
-      <i class="bi bi-folder me-1"></i> Browse VCs
-    </a>
-    <a href="https://startup.projectstartups.com/startup_list/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
-      <i class="bi bi-folder me-1"></i> Browse Startups
-    </a>
-    
-    <!-- Download/Purchase -->
-    <a href="https://vc.projectstartups.com/buy/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
-      <i class="bi bi-download me-1"></i> Get VC Data
-    </a>
-    <a href="https://startup.projectstartups.com/buy/" class="text-decoration-none text-primary px-2 py-1 rounded hover-effect">
-      <i class="bi bi-download me-1"></i> Get Startup Data
-    </a>
-  </div>
-</div>
-  
-  
-  
-  
+  <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 mt-4">
+  <a href="https://payhip.com/projectstartups/collection/vc-lists" class="btn btn-primary btn-lg px-4 fw-semibold">
+    🔷 Buy VC Database
+  </a>
+  <a href="https://payhip.com/projectstartups/collection/funded-lists" class="btn btn-success btn-lg px-4 fw-semibold">
+    🟩 Buy Startup Database
+  </a>
+  <a href="https://projectstartups.substack.com/p/welcome-to-projectstartups" class="btn btn-outline-dark btn-lg px-4">
+    🎁 Get Free Sample
+  </a>
+</div>  
   
   
   
@@ -243,22 +192,23 @@
 
 
 <!-- Footer -->
+<!-- Footer -->
 <footer class="bg-dark text-white mt-auto">
   <div class="container py-5">
     <div class="row">
 
       <!-- Databases -->
       <div class="col-12 col-md-4 mb-4">
-        <h6 class="text-uppercase fw-bold mb-3">Search VC/Startups</h6>
+        <h6 class="text-uppercase fw-bold mb-3">Search</h6>
         <ul class="list-unstyled">
-          <li><a class="text-white text-decoration-none" href="https://vc.projectstartups.com/">Search VC Firms</a></li>
-          <li><a class="text-white text-decoration-none" href="https://startup.projectstartups.com/">Search Funded Startups</a></li>
+          <li><a class="text-white text-decoration-none" href="https://vc.projectstartups.com/">VC Firms</a></li>
+          <li><a class="text-white text-decoration-none" href="https://startup.projectstartups.com/">Funded Startups</a></li>
         </ul>
       </div>
 
       <!-- Lists -->
       <div class="col-12 col-md-4 mb-4">
-        <h6 class="text-uppercase fw-bold mb-3">VC/Startup Lists</h6>
+        <h6 class="text-uppercase fw-bold mb-3">Lists</h6>
         <ul class="list-unstyled">
           <li><a class="text-white text-decoration-none" href="https://vc.projectstartups.com/vc_list/">VC Lists</a></li>
           <li><a class="text-white text-decoration-none" href="https://startup.projectstartups.com/startup_list/">Startup Lists</a></li>
@@ -267,10 +217,10 @@
 
       <!-- Buy -->
       <div class="col-12 col-md-4 mb-4">
-        <h6 class="text-uppercase fw-bold mb-3">Download</h6>
+        <h6 class="text-uppercase fw-bold mb-3">Buy Now</h6>
         <ul class="list-unstyled">
-          <li><a class="text-white text-decoration-none" href="https://vc.projectstartups.com/buy/">Download VC Lists</a></li>
-          <li><a class="text-white text-decoration-none" href="https://startup.projectstartups.com/buy/">Download Startup Lists</a></li>
+          <li><a class="text-white text-decoration-none" href="https://payhip.com/projectstartups/collection/vc-lists">Buy VC lists</a></li>
+          <li><a class="text-white text-decoration-none" href="https://payhip.com/projectstartups/collection/funded-lists">Buy Startup lists</a></li>
         </ul>
       </div>
 
